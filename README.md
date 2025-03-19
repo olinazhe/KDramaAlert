@@ -122,3 +122,18 @@ Link: https://docs.google.com/document/d/1sF2zsubii_SYJLfZN02UB9FvtH1iLmi9xd-X4w
 - If you would like to see stuff added to the dashboard you can send an email through the course email and prefix the title with FEATURE REQUEST
 - You can also email regarding any questions relating to the service itself. If you think things can be improved or some better logic can be implemented for certain portions, or even just want to know more about the project then feel free to do so.
 
+
+## Git notes:
+
+- work in YOUR branch
+- to update your branch to main:
+  - git checkout origin main
+  - git pull
+  - git checkout origin <your-branch>
+  - git merge main
+- to update your changes to main you must submit a pull request
+  - go to the github repo website
+  - click pull requests > new pull requests
+  - make sure olinazhe/KDramaAlert is selected, and master on the left
+  - on the right select your branch
+  - click create pull request
