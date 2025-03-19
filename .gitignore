@@ -18,6 +18,3 @@ build/
 *.egg-info/
 helpers/*
 json_template/
-
-backend/requirements.txt
-requirements.txt
