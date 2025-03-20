@@ -19,47 +19,6 @@ def genre_to_array():
             for s in list_of_strings:
                 new_list.append(s.strip())
             kdramas_df.at[idx, t] = new_list
-# def genre_to_array():
-#     for idx,row in kdramas_df.iterrows():
-#         genre = row['genre']
-#         if isinstance(genre, list):
-#             list_of_strings = genre
-#         else: 
-#             list_of_strings = genre.split(",")
-#         new_list = []
-#         for s in list_of_strings:
-#             new_list.append(s.strip())
-#         kdramas_df.at[idx, 'genre'] = new_list
-#     for idx,row in kdramas_df.iterrows():
-#         tag = row['tags']
-#         if isinstance(tag,list):
-#             list_of_strings = tag 
-#         else:
-#             list_of_strings = tag.split(",")
-#         new_list = []
-#         for s in list_of_strings:
-#             new_list.append(s.strip())
-#         kdramas_df.at[idx, 'tags'] = new_list
-#     for idx,row in kdramas_df.iterrows():
-#         tag = row['network']
-#         if isinstance(tag,list):
-#             list_of_strings = tag 
-#         else:
-#             list_of_strings = tag.split(",")
-#         new_list = []
-#         for s in list_of_strings:
-#             new_list.append(s.strip())
-#         kdramas_df.at[idx, 'network'] = new_list
-#     for idx,row in kdramas_df.iterrows():
-#         tag = row['main-cast']
-#         if isinstance(tag,list):
-#             list_of_strings = tag 
-#         else:
-#             list_of_strings = tag.split(",")
-#         new_list = []
-#         for s in list_of_strings:
-#             new_list.append(s.strip())
-#         kdramas_df.at[idx, 'main-cast'] = new_list
     
 
 # ROOT_PATH for linking with all your files. 
@@ -77,8 +36,6 @@ with open(json_file_path, 'r') as file:
     data = json.load(file)
     kdramas_df = pd.DataFrame(data)
     genre_to_array()
-with open(json_file_path, 'w') as file:
-    json.dump(kdramas_df.to_dict(orient='records'), file, indent=2)
 
 app = Flask(__name__)
 CORS(app)
