@@ -32,7 +32,8 @@ def json_search(query):
     matches = pd.concat([title_matches, synopsis_matches]).drop_duplicates(keep="first")
 
     matches_filtered = matches[['name', 'synopsis', 'score']]
-
+    if matches_filtered.empty:
+        matches_filtered = kdramas_df[['name','synopsis','score']]
     matches_filtered_json = matches_filtered.to_json(orient='records')
     return matches_filtered_json
 
