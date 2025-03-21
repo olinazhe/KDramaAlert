@@ -25,9 +25,14 @@ CORS(app)
 
 # Sample search using json with pandas
 def json_search(query):
-    matches = []
-    matches = kdramas_df[kdramas_df['synopsis'].str.lower().str.contains(query.lower())]
+    synopsis_matches, title_matches = [], []
+    synopsis_matches = kdramas_df[kdramas_df['synopsis'].str.lower().str.contains(query.lower())]
+    title_matches = kdramas_df[kdramas_df['name'].str.lower().str.contains(query.lower())]
+
+    matches = pd.concat([title_matches, synopsis_matches]).drop_duplicates(keep="first")
+
     matches_filtered = matches[['name', 'synopsis', 'score']]
+
     matches_filtered_json = matches_filtered.to_json(orient='records')
     return matches_filtered_json
 
