@@ -2,9 +2,8 @@ import json
 import os
 from flask import Flask, render_template, request
 from flask_cors import CORS
-from helpers.similarity import get_title_sim, cossim_scores
+# from helpers.similarity import get_title_sim, cossim_scores
 import pandas as pd
-from helpers import preprocessing, similarity
 from collections import defaultdict
 
 # ROOT_PATH for linking with all your files. 
@@ -44,18 +43,16 @@ def json_search(query):
     matches_filtered_json = matches_filtered.to_json(orient='records')
     return matches_filtered_json
 
-def cossim_search(query):
-    query_dictionary = similarity.query_word_counts(query)
-    inv_idx = preprocessing.build_inverted_index(kdramas_df['synopsis'])
-    idf_dict = preprocessing.compute_idf(inv_idx, len(kdramas_df['synopsis']))
-    doc_norms = preprocessing.compute_doc_norms(inv_idx, idf_dict, len(kdramas_df['synopsis']))
-    scores = similarity.dot_scores(query_dictionary, inv_idx, idf_dict)
-    
+# def cossim_search(query):
+#     query_dictionary = similarity.query_word_counts(query)
+#     inv_idx = preprocessing.build_inverted_index(kdramas_df['synopsis'])
+#     idf_dict = preprocessing.compute_idf(inv_idx, len(kdramas_df['synopsis']))
+#     doc_norms = preprocessing.compute_doc_norms(inv_idx, idf_dict, len(kdramas_df['synopsis']))
+#     scores = similarity.dot_scores(query_dictionary, inv_idx, idf_dict)
 
-
-def search(query):
-    synopsis_score = cossim_scores()
-    title_score  = get_title_sim(query, kdramas_df["name"])
+# def search(query):
+#     synopsis_score = cossim_scores()
+#     title_score  = get_title_sim(query, kdramas_df["name"])
 
 @app.route("/")
 def home():
