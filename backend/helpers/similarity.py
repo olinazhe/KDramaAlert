@@ -1,19 +1,10 @@
 import numpy as np
 from typing import List
 
-
-class Foo:
-  def __init__(self, documents: List[str]):
+def get_sim(q, term_doc_matrix, tfidf):
+    """Returns cosine similarity
     """
-    Initializes a Foo.
-
-    Parameters
-    ----------
-    documents : List[str]
-      A list of documents
-    """
-    self.documents = documents
-  
-    
-  
-
+    similarities = []
+    for d in term_doc_matrix:
+        similarities.append(np.dot(q, d) / (np.linalg.norm(q) * np.linalg.norm(d)))
+    return similarities
