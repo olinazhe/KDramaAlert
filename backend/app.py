@@ -44,11 +44,16 @@ def json_search(query):
     return matches_filtered_json
 
 def cossim_search(query):
-    query_dictionary = similarity.query_word_counts(query)
     inv_idx = preprocessing.build_inverted_index(kdramas_df['synopsis'])
     idf_dict = preprocessing.compute_idf(inv_idx, len(kdramas_df['synopsis']))
     doc_norms = preprocessing.compute_doc_norms(inv_idx, idf_dict, len(kdramas_df['synopsis']))
-    scores = similarity.dot_scores(query_dictionary, inv_idx, idf_dict)
+    scores = similarity.index_search(query, inv_idx, idf_dict, doc_norms)
+    doc_ids = [doc_id for _, doc_id in scores]
+    ranked_docs = kdramas_df.iloc[doc_ids]
+    matches_filtered = ranked_docs if not ranked_docs.empty else kdramas_df
+    matches_filtered_json = matches_filtered.to_json(orient='records')
+    return matches_filtered_json
+
     
 
 
@@ -59,7 +64,7 @@ def home():
 @app.route("/episodes")
 def episodes_search():
     text = request.args.get("title")
-    return json_search(text)
+    return cossim_search(text)
 
 if 'DB_NAME' not in os.environ:
     app.run(debug=True,host="0.0.0.0",port=5000)

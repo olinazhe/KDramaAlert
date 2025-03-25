@@ -28,7 +28,7 @@
   <script>
     function answerBoxTemplate(row) {
       return `<div class='result-card'>
-                <img src=${row["img-url"]} class='drama-image'>
+                <img src=${row["img"]} class='drama-image'>
                 <div class='drama-info'>
                     <div class='drama-title-rating'>
                         <h3 class='drama-title'>${row.name}</h3>
@@ -36,11 +36,11 @@
                     </div>
                     <div class='drama-year-episodes'>
                         <p class='drama-year'>${row.year}</p>
-                        <p class='drama-episodes'>${row.episode.split(" ")[0]} episodes</p>
+                        <p class='drama-episodes'>${row.episodeCount.split(" ")[0]} episodes</p>
                     </div>
                     <p class='drama-desc'>${row.synopsis}</p>
                     <div class='drama-genres-tags-list'>
-                      ${row.genre.split(", ").map(genre => `<p class='drama-genres'>${genre}</p>`).join("")}
+                      ${row.genres.split(", ").map(genres => `<p class='drama-genres'>${genres}</p>`).join("")}
                     </div>
                     <div class='drama-networks'>
                         <img src="{{ url_for('static', filename='images/movieicon.svg') }}" />
