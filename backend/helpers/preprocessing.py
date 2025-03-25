@@ -52,3 +52,15 @@ def compute_idf(inv_idx, n_docs, min_df=10, max_df_ratio=0.95):
       if (df >= min_df and (df / n_docs) <= max_df_ratio):
         result[term] = math.log2(n_docs / (1 + df))
     return result
+
+def compute_doc_norms(index, idf, n_docs):
+    """
+    Precompute the euclidean norm of each document.
+    """
+    result = np.zeros(n_docs)
+    for term in index:
+      if term in idf:
+        value = idf[term]
+        for doc, count in index[term]:
+          result[doc] += (count * value) ** 2
+    return np.sqrt(result)

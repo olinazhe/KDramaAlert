@@ -2,7 +2,14 @@ import numpy as np
 from typing import List
 from collections import defaultdict
 
-def cossim_scores(query_word_counts: dict, inverted_index: dict, idf: dict) -> dict:
+def query_word_counts(query):
+    query = query.lower().split(" ")
+    query_dictionary = defaultdict(int)
+    for word in query:
+      query_dictionary[word] += 1
+    return query_dictionary
+
+def doc_scores(query_word_counts: dict, inverted_index: dict, idf: dict) -> dict:
     """
     Perform a term-at-a-time iteration to efficiently compute the numerator term of cosine similarity across multiple documents.
     """
@@ -33,7 +40,7 @@ def index_search(query: str, inverted_index: dict, idf, doc_norms):
         query_norm += (tf[word] * word_idf) ** 2
     query_norm = np.sqrt(query_norm)
 
-    cossim = cossim_scores(tf, inverted_index, idf)
+    cossim = doc_scores(tf, inverted_index, idf)
 
     results = []
     for i in cossim:
