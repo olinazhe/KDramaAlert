@@ -2,6 +2,8 @@ import re
 import numpy as np
 from typing import List, Tuple
 from sklearn.feature_extraction.text import TfidfVectorizer
+from collections import defaultdict
+import math
 
 def strip_text(text: str, regex: str = r"\w+(?:'\w+)?") -> List[str]:
   """
@@ -25,3 +27,28 @@ def build_td_mat(documents: str) -> Tuple[np.ndarray, np.ndarray]:
   X = vectorizer.fit_transform(documents).toarray()
   terms = vectorizer.get_feature_names_out()
   return X, terms
+
+def build_inverted_index(msgs: List[str]) -> dict:
+    """
+    Builds an inverted index .
+    """
+    result = defaultdict(list)
+    for i, msg in enumerate(msgs):
+      counts = defaultdict(int)
+      tokenized_msg = msg.split(" ")
+      for token in tokenized_msg:
+        counts[token] += 1
+      for term, count in counts.items():
+        result[term].append((i, count))
+    return result
+
+def compute_idf(inv_idx, n_docs, min_df=10, max_df_ratio=0.95):
+    """Compute term IDF values from the inverted index.
+    Words that are too frequent or too infrequent get pruned.
+    """
+    result = {}
+    for term in inv_idx:
+      df = len(inv_idx[term])
+      if (df >= min_df and (df / n_docs) <= max_df_ratio):
+        result[term] = math.log2(n_docs / (1 + df))
+    return result
