@@ -41,6 +41,7 @@
                     <p class='drama-desc'>${row.synopsis}</p>
                     <div class='drama-genres-tags-list'>
                       ${row.genres.split(", ").map(genres => `<p class='drama-genres'>${genres}</p>`).join("")}
+
                     </div>
                     <div class='drama-networks'>
                         <img src="{{ url_for('static', filename='images/movieicon.svg') }}" />
