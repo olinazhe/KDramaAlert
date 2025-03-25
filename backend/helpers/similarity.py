@@ -1,6 +1,7 @@
 import numpy as np
 from typing import List
 from collections import defaultdict
+from preprocessing import strip_text
 
 def query_word_counts(query):
     query = query.lower().split(" ")
@@ -50,3 +51,15 @@ def index_search(query: str, inverted_index: dict, idf, doc_norms):
 
     results.sort(key = lambda x : x[0], reverse = True)
     return results
+
+def get_title_sim(query: str, titles: List[str]) -> np.ndarray:
+    """
+    Returns the similarity between a query and each title using Jaccard similarity in the range [0, 1].
+    """
+
+    types = set(strip_text(query))
+    result = np.zeros((len(titles),))
+    for i, title in enumerate(titles):
+        title_tokens = set(strip_text(title))
+        result[i] = len(title_tokens.intersection(types)) / len(title_tokens)
+    return result

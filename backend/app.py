@@ -2,6 +2,7 @@ import json
 import os
 from flask import Flask, render_template, request
 from flask_cors import CORS
+from helpers.similarity import get_title_sim, cossim_scores
 import pandas as pd
 from helpers import preprocessing, similarity
 from collections import defaultdict
@@ -51,6 +52,10 @@ def cossim_search(query):
     scores = similarity.dot_scores(query_dictionary, inv_idx, idf_dict)
     
 
+
+def search(query):
+    synopsis_score = cossim_scores()
+    title_score  = get_title_sim(query, kdramas_df["name"])
 
 @app.route("/")
 def home():

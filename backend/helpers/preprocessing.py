@@ -64,3 +64,12 @@ def compute_doc_norms(index, idf, n_docs):
         for doc, count in index[term]:
           result[doc] += (count * value) ** 2
     return np.sqrt(result)
+
+def drama_name_to_index(docs_df):
+  """
+  Returns a dictionary with keys as drama names and values as their index in the data frame.
+  """
+  res = {}
+  for index, row in docs_df.iterrows():
+    res[row["name"]] = index
+  return res
