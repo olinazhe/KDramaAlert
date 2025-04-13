@@ -4,6 +4,31 @@ from typing import List, Tuple
 from sklearn.feature_extraction.text import TfidfVectorizer
 from collections import defaultdict
 import math
+import pandas as pd
+
+def process_data(data):
+  kdramas_df = pd.DataFrame(data)
+  #tags spit differently
+  convert = ['genres','network', 'tags', 'mainCast']
+  for t in convert:
+    if t == 'tags':
+      for idx,row in kdramas_df.iterrows():
+        tags = row[t]
+        list_of_strings = tags.split(",, ")
+        new_list = []
+        for s in list_of_strings:
+            new_list.append(s.strip())
+        kdramas_df.at[idx,t] = new_list
+    else:
+      for idx,row in kdramas_df.iterrows():
+        genre = row[t]
+        list_of_strings = genre.split(", ")
+        new_list = []
+        for s in list_of_strings:
+          new_list.append(s.strip())
+        kdramas_df.at[idx,t] = new_list
+  return kdramas_df
+
 
 def strip_text(text: str, regex: str = r"\w+(?:'\w+)?") -> List[str]:
   """

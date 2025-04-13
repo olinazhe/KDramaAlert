@@ -7,6 +7,7 @@ from helpers import preprocessing, similarity
 import pandas as pd
 from collections import defaultdict
 
+
 # ROOT_PATH for linking with all your files. 
 # Feel free to use a config.py or settings.py with a global export variable
 os.environ['ROOT_PATH'] = os.path.abspath(os.path.join("..",os.curdir))
@@ -20,7 +21,7 @@ json_file_path = os.path.join(current_directory, 'init.json')
 # Assuming your JSON data is stored in a file named 'init.json'
 with open(json_file_path, 'r') as file:
     data = json.load(file)
-    kdramas_df = pd.DataFrame(data)
+    kdramas_df = preprocessing.process_data(data)
 
 app = Flask(__name__)
 CORS(app)
