@@ -5,6 +5,7 @@ from sklearn.feature_extraction.text import TfidfVectorizer
 from collections import defaultdict
 import math
 import pandas as pd
+from pandas import DataFrame
 
 def process_data(data):
   kdramas_df = pd.DataFrame(data)
@@ -44,14 +45,14 @@ def _build_vectorizer(max_features, stop_words, max_df=0.8, min_df=10, norm='l2'
   
   return TfidfVectorizer(stop_words=stop_words, max_features=max_features, max_df=max_df, min_df=min_df, norm=norm)
 
-def build_td_mat(documents: str) -> Tuple[np.ndarray, np.ndarray]:
+def build_td_mat(dataframe: DataFrame) -> Tuple[np.ndarray, dict]:
   """
   Returns the term document matrix along with the terms that represent each column.
   """
   vectorizer = _build_vectorizer(5000, "english")
-  X = vectorizer.fit_transform(documents).toarray()
-  terms = vectorizer.get_feature_names_out()
-  return X, terms
+  doc_to_vocab = vectorizer.fit_transform(dataframe["synopsis"].to_list()).toarray()
+  index_to_vocab = list(vectorizer.get_feature_names_out())
+  return doc_to_vocab, index_to_vocab
 
 def build_inverted_index(msgs: List[str]) -> dict:
     """
