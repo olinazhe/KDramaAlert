@@ -2,11 +2,9 @@ import json
 import os
 from flask import Flask, render_template, request
 from flask_cors import CORS
-# from helpers.similarity import get_title_sim, cossim_scores
 from helpers import preprocessing, similarity
 import pandas as pd
 from collections import defaultdict
-
 
 # ROOT_PATH for linking with all your files. 
 # Feel free to use a config.py or settings.py with a global export variable

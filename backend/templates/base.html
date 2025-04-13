@@ -36,11 +36,17 @@
                     </div>
                     <div class='drama-year-episodes'>
                         <p class='drama-year'>${row.year}</p>
-                        <p class='drama-episodes'>${row.episodeCount.split(" ")[0]} episodes</p>
+                        <p class='drama-episodes'>${
+                          row.episodeCount.split(" ")[0]
+                        } episodes</p>
                     </div>
                     <p class='drama-desc'>${row.synopsis}</p>
                     <div class='drama-genres-tags-list'>
-                      ${row.genres.split(", ").map(genres => `<p class='drama-genres'>${genres}</p>`).join("")}
+                      ${row.genres
+                        .map(
+                          (genres) => `<p class='drama-genres'>${genres}</p>`
+                        )
+                        .join("")}
 
                     </div>
                     <div class='drama-networks'>
@@ -56,25 +62,26 @@
     }
 
     function filterText() {
-        if (event.key === "Enter") {
-            document.getElementById("answer-box").innerHTML = "";
-            console.log(document.getElementById("filter-text-val").value);
-            fetch("/episodes?" + new URLSearchParams({
-            title: document.getElementById("filter-text-val").value,
-            }).toString())
-            .then((response) => response.json())
-            .then((data) =>
+      if (event.key === "Enter") {
+        document.getElementById("answer-box").innerHTML = "";
+        fetch(
+          "/episodes?" +
+            new URLSearchParams({
+              title: document.getElementById("filter-text-val").value,
+            }).toString()
+        )
+          .then((response) => response.json())
+          .then((data) =>
             data.forEach((row, index) => {
-            if (index >= 25) {
-              return;
-            }
-            let tempDiv = document.createElement("div");
-            tempDiv.innerHTML = answerBoxTemplate(row);
-            document.getElementById("answer-box").appendChild(tempDiv);
-          })
-        );
-        }
-      
+              if (index >= 25) {
+                return;
+              }
+              let tempDiv = document.createElement("div");
+              tempDiv.innerHTML = answerBoxTemplate(row);
+              document.getElementById("answer-box").appendChild(tempDiv);
+            })
+          );
+      }
     }
   </script>
 </body>
