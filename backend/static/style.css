@@ -1,3 +1,7 @@
+body{
+  background-color: #c6e1eb;
+}
+
 .full-body-container {
   top: 0;
   left: 0;
@@ -9,7 +13,7 @@
   justify-content: start;
   align-items: center;
   flex-direction: column;
-  background-color: #ecfeff;
+  color: #465973;
 }
 
 #dark-blue {
@@ -60,13 +64,18 @@
 
 #answer-box {
   width: 90%;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: 50px;
   margin-top: 50px;
+  justify-items: center;
+  padding-left: 300px;
+  padding-right: 300px;
 }
 
 .drama-title {
-    font-family: "Kanit", sans-serif;
-    color: #000;
-    font-size: 32px;
+    color: #465973;
+    font-size: 28px;
     font-style: normal;
     font-weight: 700;
     line-height: normal;
@@ -74,17 +83,21 @@
 }
 
 .drama-rating {
-    color: #000;
-    font-family: "Kanit", sans-serif;
-    font-size: 32px;
+    font-family: "Montserrat", sans-serif;
+    font-size: 20px;
+    margin: 0;
     font-style: normal;
-    font-weight: 700;
+    font-weight: 400;
     line-height: normal;
-    margin: 0px;
+}
+
+.rating-with-image{
+    display: flex;
+    flex-direction: row;
+    gap: 8px;
 }
 
 .drama-year {
-    color: #000;
     font-family: "Montserrat", sans-serif;
     font-size: 24px;
     font-style: normal;
@@ -94,7 +107,6 @@
 }
 
 .drama-episodes {
-    color: #000;
     font-family: "Montserrat", sans-serif;
     font-size: 24px;
     font-style: normal;
@@ -105,8 +117,7 @@
 
 .drama-desc {
     font-family: "Montserrat", sans-serif;
-    color: #000;
-    font-size: 18px;
+    font-size: 16px;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
@@ -114,7 +125,19 @@
 }
 
 .result-card {
+    position: relative;
+    border-radius: 12px;
+    overflow: hidden;
+    cursor: pointer;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+    transition: transform 0.2s ease;
     display: flex;
+    width: 300px;
+    height: 422px;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    /* display: flex;
     padding: 48px 60px;
     align-items: flex-start;
     margin-top: 24px;
@@ -122,48 +145,79 @@
     gap: 45px;
     border-color: #000;
     border-radius: 17.679px;
-    background: #fff;
+    background: #fff; */
+}
+
+.result-card:hover {
+    transform: scale(1.03);
 }
 
 .drama-image {
-    width: 309.451px;
-    height: 435.295px;
-    flex-shrink: 0;
-    aspect-ratio: 309.45/435.29;
-    margin: 0px;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: opacity 0.3s ease;
+  opacity: 1;
 }
 
-.drama-info {
+/* .drama-info {
     display: flex;
-    width: 1035px;
+    width: 310px;
     flex-direction: column;
     align-items: flex-start;
     gap: 11.797px;
     font-family: "Montserrat", sans-serif;
+} */
+
+.drama-info {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  background-color: white;
+  opacity: 0;
+  padding: 24px;
+  box-sizing: border-box;
+  overflow-y: auto;
+  transition: opacity 0.3s ease;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 13px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.result-card:hover .drama-info {
+  opacity: 1;
+}
+
+.result-card:hover .drama-image {
+  opacity: 0;
 }
 
 .drama-genres-tags-list {
     display: flex;
     align-items: center;
-    gap: 16px;
+    gap: 12px;
+    flex-wrap: wrap;
+    row-gap: 8px;
 }
 
 .drama-genres {
     font-family: "Montserrat", sans-serif;
-    color: #000;
-    font-size: 18px;
+    font-size: 16px;
     font-style: normal;
     font-weight: 400;
     line-height: normal;
     margin: 0px;
-
     display: flex;
-    padding: 6px 18px;
+    padding: 4px 16px;
     justify-content: center;
     align-items: center;
-    gap: 10px;
     border-radius: 48px;
-    background: #EBEBEB;
+    background: #f8dcdd;
 }
 
 .drama-networks {
@@ -175,7 +229,6 @@
 
 .drama-networks-text {
     font-family: "Montserrat", sans-serif;
-    color: #000;
     font-size: 18px;
     font-style: normal;
     font-weight: 400;
