@@ -1,7 +1,7 @@
 import numpy as np
 from typing import List
 from collections import defaultdict
-from pandas import DataFrame
+import pandas as pd
 from scipy.sparse.linalg import svds
 from sklearn.preprocessing import normalize
 
@@ -71,10 +71,14 @@ def svd(query, vectorizer, td_matrix):
   sims = np.clip(docs_compressed_normed.dot(query_vec), 0, None)
   return sims
 
-def get_sim(query:str, df: DataFrame, td_mat: np.ndarray, inv_idx: dict, terms: List[str], doc_norms:np.ndarray, vectorizer) -> np.ndarray:
+def get_sim(query:str, df: pd.DataFrame, td_mat: np.ndarray, inv_idx: dict, terms: List[str], doc_norms:np.ndarray, vectorizer) -> np.ndarray:
   cossim = get_cosine_similarity(query, td_mat, inv_idx, terms, doc_norms)
   title_sim = get_title_sim(query, df["name"])
   svd_sim = svd(query, vectorizer, td_mat)
   weighted_sim =  cossim / 3 + title_sim / 3 + svd_sim / 3
+  
+  df['simScore'] = weighted_sim
   best_match_indices = np.argsort(weighted_sim)[::-1]
-  return df.iloc[best_match_indices].to_json(orient="records")
+  best_matches = df.iloc[best_match_indices]
+  
+  return best_matches.to_json(orient="records")
