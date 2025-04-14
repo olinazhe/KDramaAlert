@@ -6,8 +6,7 @@ from collections import defaultdict
 import math
 import pandas as pd
 from pandas import DataFrame
-from scipy.sparse.linalg import svds
-from sklearn.preprocessing import normalize
+
 
 def process_data(data):
   kdramas_df = pd.DataFrame(data)
@@ -30,7 +29,7 @@ def process_data(data):
         for s in list_of_strings:
           new_list.append(s.strip())
         kdramas_df.at[idx,t] = new_list
-  return kdramas_df
+  return kdramas_df[kdramas_df['synopsis'].str.strip() != '']
 
 
 def strip_text(text: str, regex: str = r"\w+(?:'\w+)?") -> List[str]:
@@ -40,35 +39,35 @@ def strip_text(text: str, regex: str = r"\w+(?:'\w+)?") -> List[str]:
   
   return re.findall(regex, text.lower())
 
-def _build_vectorizer(max_features, stop_words, max_df=0.8, min_df=10, norm='l2'):
+def _build_vectorizer(max_features, stop_words, max_df=0.95, min_df=5, norm='l2'):
   """
   Returns a TfidfVectorizer object with the above preprocessing properties.
   """
   
   return TfidfVectorizer(stop_words=stop_words, max_features=max_features, max_df=max_df, min_df=min_df, norm=norm)
 
-def build_td_mat(dataframe: DataFrame) -> Tuple[np.ndarray, dict]:
+def build_td_mat(df: DataFrame) -> Tuple[TfidfVectorizer, np.ndarray, list]:
   """
   Returns the term document matrix along with the terms that represent each column.
   """
-  vectorizer = _build_vectorizer(5000, "english")
-  doc_to_vocab = vectorizer.fit_transform(dataframe["synopsis"].to_list()).toarray()
-  index_to_vocab = list(vectorizer.get_feature_names_out())
-  return doc_to_vocab, index_to_vocab
+  vectorizer = _build_vectorizer(7500, "english")
+  synopsis_td_mat = vectorizer.fit_transform(df["synopsis"]).toarray()
+  terms = list(vectorizer.get_feature_names_out())
+  return vectorizer, synopsis_td_mat, terms
 
-def build_inverted_index(msgs: List[str]) -> dict:
+def build_inverted_index(td_mat: np.ndarray, terms: List[str]) -> dict:
     """
     Builds an inverted index .
     """
-    result = defaultdict(list)
-    for i, msg in enumerate(msgs):
-      counts = defaultdict(int)
-      tokenized_msg = msg.split(" ")
-      for token in tokenized_msg:
-        counts[token] += 1
-      for term, count in counts.items():
-        result[term].append((i, count))
-    return result
+    inv_idx = {}
+    for term_index, term in enumerate(terms):
+      col = td_mat[:, term_index]
+      inv_idx[term] = []
+      for doc_index, tfidf in enumerate(col):
+        if tfidf != 0:
+          inv_idx[term].append(doc_index)
+
+    return inv_idx
 
 def compute_idf(inv_idx, n_docs, min_df=10, max_df_ratio=0.95):
     """Compute term IDF values from the inverted index.
@@ -81,17 +80,11 @@ def compute_idf(inv_idx, n_docs, min_df=10, max_df_ratio=0.95):
         result[term] = math.log2(n_docs / (1 + df))
     return result
 
-def compute_doc_norms(index, idf, n_docs):
+def compute_doc_norms(td_mat: np.ndarray) -> np.ndarray:
     """
     Precompute the euclidean norm of each document.
     """
-    result = np.zeros(n_docs)
-    for term in index:
-      if term in idf:
-        value = idf[term]
-        for doc, count in index[term]:
-          result[doc] += (count * value) ** 2
-    return np.sqrt(result)
+    return np.linalg.norm(td_mat, axis=1)
 
 def drama_name_to_index(docs_df):
   """
@@ -102,21 +95,4 @@ def drama_name_to_index(docs_df):
     res[row["name"]] = index
   return res
 
-def svd(dataframe, query):
-  vectorizer = TfidfVectorizer(stop_words = 'english', max_df = .8,
-                            min_df = 1)
-  td_matrix = vectorizer.fit_transform(dataframe["synopsis"])
-  docs_compressed, s, words_compressed = svds(td_matrix, k=40)
-  words_compressed = words_compressed.transpose()
-  td_matrix_np = td_matrix.transpose()
-  td_matrix_np = normalize(td_matrix_np)
 
-  query_tfidf = vectorizer.transform([query]).toarray()
-  print("Non-zero entries in query_tfidf:", np.count_nonzero(query_tfidf))
-
-  query_vec = normalize(np.dot(query_tfidf, words_compressed)).squeeze()
-
-  docs_compressed_normed = normalize(docs_compressed)
-  sims = docs_compressed_normed.dot(query_vec)
-  asort = np.argsort(-sims)
-  return [(dataframe.iloc[i]["name"],sims[i]) for i in asort[1:]]
