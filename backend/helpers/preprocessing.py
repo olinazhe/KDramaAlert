@@ -6,6 +6,8 @@ from collections import defaultdict
 import math
 import pandas as pd
 from pandas import DataFrame
+from scipy.sparse.linalg import svds
+from sklearn.preprocessing import normalize
 
 def process_data(data):
   kdramas_df = pd.DataFrame(data)
@@ -99,3 +101,22 @@ def drama_name_to_index(docs_df):
   for index, row in docs_df.iterrows():
     res[row["name"]] = index
   return res
+
+def svd(dataframe, query):
+  vectorizer = TfidfVectorizer(stop_words = 'english', max_df = .8,
+                            min_df = 1)
+  td_matrix = vectorizer.fit_transform(dataframe["synopsis"])
+  docs_compressed, s, words_compressed = svds(td_matrix, k=40)
+  words_compressed = words_compressed.transpose()
+  td_matrix_np = td_matrix.transpose()
+  td_matrix_np = normalize(td_matrix_np)
+
+  query_tfidf = vectorizer.transform([query]).toarray()
+  print("Non-zero entries in query_tfidf:", np.count_nonzero(query_tfidf))
+
+  query_vec = normalize(np.dot(query_tfidf, words_compressed)).squeeze()
+
+  docs_compressed_normed = normalize(docs_compressed)
+  sims = docs_compressed_normed.dot(query_vec)
+  asort = np.argsort(-sims)
+  return [(dataframe.iloc[i]["name"],sims[i]) for i in asort[1:]]
