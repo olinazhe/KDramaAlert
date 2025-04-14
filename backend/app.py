@@ -37,5 +37,13 @@ def episodes_search():
     text = request.args.get("title")
     return similarity.get_sim(text.lower(), kdramas_df, synopsis_td_mat, inv_idx, terms, doc_norms, vectorizer)
 
+@app.route("/<id>")
+def drama(id):
+    return render_template('drama.html', drama=id)
+
+@app.route("/drama/<id>")
+def drama_details(id):
+    return kdramas_df.iloc[[int(id)]].to_json(orient="records")
+
 if 'DB_NAME' not in os.environ:
     app.run(debug=True,host="0.0.0.0",port=5000)

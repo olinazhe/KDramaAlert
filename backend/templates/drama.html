@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<title>{% block title %}{% endblock %} - Flaskr</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link
+  href="https://fonts.googleapis.com/css2?family=Kanit&family=Montserrat&family=Open+Sans:wght@500&display=swap"
+  rel="stylesheet"
+/>
+<body>
+  <div class="full-body-container">
+    <div id="container"></div>
+  </div>
+
+  <script>
+    const drama = "{{drama}}";
+
+    function pageTemplate(drama) {
+      return `<div>
+          <h1>${drama.name}</h1>
+          <p>${drama.year}</p>
+          <p>${drama.synopsis}</p>
+        </div>
+        <div>
+          <img src=${drama.img} class='drama-image'>
+        </div>`;
+    }
+
+    function createPage(drama) {
+      let tempDiv = document.createElement("div");
+      tempDiv.innerHTML = pageTemplate(drama);
+      document.getElementById("container").appendChild(tempDiv);
+    }
+
+    function fetchDrama(id) {
+      fetch("/drama/" + id)
+        .then((res) => res.json())
+        .then((res) => createPage(res[0]));
+    }
+
+    fetchDrama(drama);
+  </script>
+</body>

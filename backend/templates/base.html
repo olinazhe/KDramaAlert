@@ -41,6 +41,7 @@
                       (genres) => `<p class='drama-genres'>${genres}</p>`
                   ).join("")}
               </div>
+              <p class='drama-desc'>Similarity Score: ${Number((row.simScore).toFixed(4))}</p>
           </div>
       </div>`;
     }

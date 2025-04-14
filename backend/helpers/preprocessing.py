@@ -29,7 +29,10 @@ def process_data(data):
         for s in list_of_strings:
           new_list.append(s.strip())
         kdramas_df.at[idx,t] = new_list
-  return kdramas_df[kdramas_df['synopsis'].str.strip() != '']
+  kdramas_df["synopsis"] = kdramas_df['synopsis'].str.replace("\\", "'")
+  filtered_kdramas_df = kdramas_df[kdramas_df['synopsis'].str.strip() != '']
+  filtered_kdramas_df.insert(0, "id", range(len(filtered_kdramas_df)))
+  return filtered_kdramas_df
 
 
 def strip_text(text: str, regex: str = r"\w+(?:'\w+)?") -> List[str]:
