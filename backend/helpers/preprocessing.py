@@ -52,7 +52,7 @@ def build_td_mat(dataframe: DataFrame) -> Tuple[np.ndarray, dict]:
   Returns the term document matrix along with the terms that represent each column.
   """
   vectorizer = _build_vectorizer(5000, "english")
-  doc_to_vocab = vectorizer.fit_transform(dataframe["synopsis"]).toarray()
+  doc_to_vocab = vectorizer.fit_transform(dataframe["synopsis"].to_list()).toarray()
   index_to_vocab = list(vectorizer.get_feature_names_out())
   return doc_to_vocab, index_to_vocab
 
@@ -120,4 +120,3 @@ def svd(dataframe, query):
   sims = docs_compressed_normed.dot(query_vec)
   asort = np.argsort(-sims)
   return [(dataframe.iloc[i]["name"],sims[i]) for i in asort[1:]]
-
