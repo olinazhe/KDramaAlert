@@ -6,6 +6,8 @@ from collections import defaultdict
 import math
 import pandas as pd
 from pandas import DataFrame
+from scipy.sparse.linalg import svds
+from sklearn.preprocessing import normalize
 
 def process_data(data):
   kdramas_df = pd.DataFrame(data)
@@ -50,7 +52,7 @@ def build_td_mat(dataframe: DataFrame) -> Tuple[np.ndarray, dict]:
   Returns the term document matrix along with the terms that represent each column.
   """
   vectorizer = _build_vectorizer(5000, "english")
-  doc_to_vocab = vectorizer.fit_transform(dataframe["synopsis"].to_list()).toarray()
+  doc_to_vocab = vectorizer.fit_transform(dataframe["synopsis"]).toarray()
   index_to_vocab = list(vectorizer.get_feature_names_out())
   return doc_to_vocab, index_to_vocab
 
@@ -99,3 +101,23 @@ def drama_name_to_index(docs_df):
   for index, row in docs_df.iterrows():
     res[row["name"]] = index
   return res
+
+def svd(dataframe, query):
+  vectorizer = TfidfVectorizer(stop_words = 'english', max_df = .8,
+                            min_df = 1)
+  td_matrix = vectorizer.fit_transform(dataframe["synopsis"])
+  docs_compressed, s, words_compressed = svds(td_matrix, k=40)
+  words_compressed = words_compressed.transpose()
+  td_matrix_np = td_matrix.transpose()
+  td_matrix_np = normalize(td_matrix_np)
+
+  query_tfidf = vectorizer.transform([query]).toarray()
+  print("Non-zero entries in query_tfidf:", np.count_nonzero(query_tfidf))
+
+  query_vec = normalize(np.dot(query_tfidf, words_compressed)).squeeze()
+
+  docs_compressed_normed = normalize(docs_compressed)
+  sims = docs_compressed_normed.dot(query_vec)
+  asort = np.argsort(-sims)
+  return [(dataframe.iloc[i]["name"],sims[i]) for i in asort[1:]]
+

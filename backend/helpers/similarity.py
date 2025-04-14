@@ -2,6 +2,8 @@ import numpy as np
 from typing import List
 from collections import defaultdict
 
+from sklearn.feature_extraction.text import TfidfVectorizer
+
 def query_word_counts(query):
     query = query.lower().split(" ")
     query_dictionary = defaultdict(int)
