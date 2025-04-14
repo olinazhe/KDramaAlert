@@ -75,7 +75,7 @@ def get_sim(query:str, df: pd.DataFrame, td_mat: np.ndarray, inv_idx: dict, term
   cossim = get_cosine_similarity(query, td_mat, inv_idx, terms, doc_norms)
   title_sim = get_title_sim(query, df["name"])
   svd_sim = svd(query, vectorizer, td_mat)
-  weighted_sim =  cossim / 3 + title_sim / 3 + svd_sim / 3
+  weighted_sim =  3 * cossim / 8 + 3 * title_sim / 8 + svd_sim / 4
   
   df['simScore'] = weighted_sim
   best_match_indices = np.argsort(weighted_sim)[::-1]
