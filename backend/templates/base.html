@@ -28,33 +28,21 @@
   <script>
     function answerBoxTemplate(row) {
       return `<div class='result-card'>
-                <img src=${row.img} class='drama-image'>
-                <div class='drama-info'>
-                    <div class='drama-title-rating'>
-                        <h3 class='drama-title'>${row.name}</h3>
-                        <p class='drama-rating'>${row.score}/10</p>
-                    </div>
-                    <div class='drama-year-episodes'>
-                        <p class='drama-year'>${row.year}</p>
-                        <p class='drama-episodes'>${
-                          row.episodeCount.split(" ")[0]
-                        } episodes</p>
-                    </div>
-                    <p class='drama-desc'>${row.synopsis}</p>
-                    <div class='drama-genres-tags-list'>
-                      ${row.genres
-                        .map(
-                          (genres) => `<p class='drama-genres'>${genres}</p>`
-                        )
-                        .join("")}
-
-                    </div>
-                    <div class='drama-networks'>
-                        <img src="{{ url_for('static', filename='images/movieicon.svg') }}" />
-                        <p class='drama-networks-text'>${row.network}</p>
-                    </div>
-                </div>
-            </div>`;
+          <img src=${row.img} class='drama-image'>
+          <div class='drama-info'>
+              <h3 class='drama-title'>${row.name}</h3>
+              <div class='rating-with-image'>
+                  <img src="{{ url_for('static', filename='images/heart.svg') }}" />
+                  <p class='drama-rating'>${row.score}/10</p>
+              </div>
+              <p class='drama-desc'>${row.synopsis.length > 280 ? row.synopsis.slice(0, 280) + "..." : row.synopsis}</p>
+              <div class='drama-genres-tags-list'>
+                  ${row.genres.map(
+                      (genres) => `<p class='drama-genres'>${genres}</p>`
+                  ).join("")}
+              </div>
+          </div>
+      </div>`;
     }
 
     function sendFocus() {
