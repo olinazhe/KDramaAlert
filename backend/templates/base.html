@@ -11,12 +11,13 @@
   <div class="full-body-container">
     <div class="top-text">
       <div class="google-colors">
-        <h1 id="dark-blue">KDramaAlert</h1>
+        <img src="{{ url_for('static', filename='images/kdramaalert_logo.png') }}" class ='logo' />
       </div>
       <div class="input-box" onclick="sendFocus()">
-        <img src="{{ url_for('static', filename='images/mag.png') }}" />
+        <img src="{{ url_for('static', filename='images/mag.svg') }}" />
         <input
-          placeholder="Search for a KDrama"
+          class="input-text"
+          placeholder="Search by KDrama title or description for recs ..."
           id="filter-text-val"
           onkeyup="filterText()"
         />
@@ -41,7 +42,10 @@
                       (genres) => `<p class='drama-genres'>${genres}</p>`
                   ).join("")}
               </div>
-              <p class='drama-desc'>Similarity Score: ${Number((row.simScore).toFixed(4))}</p>
+              <p class='drama-desc'>Similarity: ${Number((row.simScore).toFixed(4))}%</p>
+              <div class='card-arrow'>
+                  <img src="{{ url_for('static', filename='images/right_arrow.png') }}" class='arrow-img' />
+              </div>
           </div>
       </div>`;
     }
@@ -60,17 +64,18 @@
             }).toString()
         )
           .then((response) => response.json())
-          .then((data) =>
+          .then((data) => {
             data.forEach((row, index) => {
-              if (index >= 25) {
+              if (index >= 24) {
                 return;
               }
               let tempDiv = document.createElement("div");
               tempDiv.innerHTML = answerBoxTemplate(row);
               document.getElementById("answer-box").appendChild(tempDiv);
-            })
-          );
-      }
+            });
+            document.getElementById("answer-box").scrollIntoView({ behavior: "smooth" });
+          });
+        }
     }
   </script>
 </body>
