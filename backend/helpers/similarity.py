@@ -57,6 +57,12 @@ def get_title_sim(query: str, titles: List[str]) -> np.ndarray:
         result[i] = len(title_tokens.intersection(types)) / len(title_tokens)
     return result
 
+def get_social_score(ratings: List[str]) -> np.ndarray:
+    result = np.zeros((len(ratings),))
+    for i, rating in enumerate(ratings):
+       result[i] = float(rating)/10
+    return result
+
 def svd(query, vectorizer, td_matrix):
   docs_compressed, _, words_compressed = svds(td_matrix, k=40)
   words_compressed = words_compressed.transpose()
@@ -75,7 +81,8 @@ def get_sim(query:str, df: pd.DataFrame, td_mat: np.ndarray, inv_idx: dict, term
   cossim = get_cosine_similarity(query, td_mat, inv_idx, terms, doc_norms)
   title_sim = get_title_sim(query, df["name"])
   svd_sim = svd(query, vectorizer, td_mat)
-  weighted_sim =  3 * cossim / 8 + 3 * title_sim / 8 + svd_sim / 4
+  social_score = get_social_score(df["score"])
+  weighted_sim =  3 * cossim / 8 +  title_sim / 4 + svd_sim / 4 + social_score / 8
   
   df['simScore'] = weighted_sim
   best_match_indices = np.argsort(weighted_sim)[::-1]
