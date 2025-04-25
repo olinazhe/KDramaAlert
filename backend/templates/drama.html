@@ -16,15 +16,33 @@
     const drama = "{{drama}}";
 
     function pageTemplate(drama) {
-      return `<div>
-          <h1>${drama.name}</h1>
-          <p>${drama.year}</p>
-          <p>${drama.synopsis}</p>
-        </div>
-        <div>
+      return `<div class='single-drama-container'>
           <img src=${drama.img} class='drama-image'>
-        </div>`;
-    }
+          <div class='single-drama-info'>
+            <div class='single-drama-row single-drama-row-1'>
+              <h3 class='no-margin'>${drama.name}</h3>
+              <div class='rating-with-image'>
+                <img src="{{ url_for('static', filename='images/heart.svg') }}" class='single-drama-heart' />
+                <p class='no-margin'>${drama.score}/10</p>
+              </div>
+            </div>
+            <div class='single-drama-row single-drama-row-2'>
+              <p class='no-margin'>${drama.year}</p>
+              <p class='no-margin'>${drama.episodeCount}</p>
+            </div>
+            <p class='single-drama-synopsis'>${drama.synopsis}</p>
+          </div>
+        </div>
+        <div class='recommend-drama-container'>
+          <div class='recommend-drama-section'>
+            <h3 class='recommend-drama-header'>Similar actors</h3>
+          </div>
+          <div class='recommend-drama-section'>
+            <h3 class='recommend-drama-header'>Similar genres</h3>
+          </div>
+        </div>
+        `;
+        }
 
     function createPage(drama) {
       let tempDiv = document.createElement("div");
