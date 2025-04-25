@@ -139,10 +139,25 @@ def get_top_latent_dims(query:str, vectorizer, words_compressed):
     valid_dims = [1,2,3,4,5,6,8,11,12,13,16,17,18,19]
     query_vec = query_vec[valid_dims]
     indices = np.argsort(query_vec)[-3:][::-1]
-
-    word_to_index = vectorizer.vocabulary_    
+    index_to_index = {
+    0: 1,
+    1: 2,
+    2: 3,
+    3: 4,
+    4: 5,
+    5: 6,
+    6: 8,
+    7: 11,
+    8: 12,
+    9: 13,
+    10: 16,
+    11: 17,
+    12: 18,
+    13: 19
+    }
+    word_to_index = vectorizer.vocabulary_
     index_to_word = {i:t for t,i in word_to_index.items()}
-    list_of_asorts = [ np.argsort(-words_compressed[:,index].squeeze()) for index in indices]
+    list_of_asorts = [ np.argsort(-words_compressed[:,index_to_index[index]].squeeze()) for index in indices]
     latent_words = [ [index_to_word[i] for i in asort[:20]] for asort in list_of_asorts]
 
     index_to_genre = {0: "School", 1: "Romance", 2: "Family", 3:"Historical", 4: "Drama", 5: "Thriller", 6: "Life", 7: 'Chaebol', 8:"Medical", 9:"Friends", 10: "Law", 11:"Daughter/Mother", 12:"College", 13:"Father/Son"}
