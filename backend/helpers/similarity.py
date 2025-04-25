@@ -104,7 +104,7 @@ def get_social_score(ratings: List[str]) -> np.ndarray:
     return result
 
 def svd(query, vectorizer, td_matrix):
-  docs_compressed, _, words_compressed = svds(td_matrix, k=40)
+  docs_compressed, _, words_compressed = randomized_svd(td_matrix, n_components=20, random_state=42)
   words_compressed = words_compressed.transpose()
   td_matrix_np = td_matrix.transpose()
   td_matrix_np = normalize(td_matrix_np)
@@ -137,6 +137,27 @@ def get_svd_features(query, vectorizer, td_matrix):
     asort = np.argsort(-dimension_col)
     print([index_to_word[i] for i in asort[:20]])
     print()
+
+def get_top_latent_dims(query:str, vectorizer, td_matrix: np.ndarry):
+    docs_compressed, _, words_compressed = randomized_svd(td_matrix, n_components=20, random_state=42)
+    words_compressed = words_compressed.transpose()
+    td_matrix_np = td_matrix.transpose()
+    td_matrix_np = normalize(td_matrix_np)
+
+    query_tfidf = vectorizer.transform([query]).toarray()
+
+    query_vec = normalize(np.dot(query_tfidf, words_compressed)).squeeze()
+
+    query_vec = np.array(query_vec)
+    valid_dims = [1,2,3,4,5,6,8,11,12,13,16,17,18,19]
+    query_vec = query_vec[valid_dims]
+    indices = np.argsort(query_vec)[-3:][::-1]
+    index_to_genre = {0: "School", 1: "Romance", 2: "Family", 3:"Historical", 4: "Drama", 5: "Thriller", 6: "Life", 7: 'Chaebol', 8:"Medical", 9:"Friends", 10: "Law", 11:"Daughter/Mother", 12:"College", 13:"Father/Son"}
+    genres = [index_to_genre[index] for index in indices]
+    values = query_vec[indices]
+    return list(zip(genres, values))
+
+
 def get_sim(query:str, df: pd.DataFrame, td_mat: np.ndarray, inv_idx: dict, terms: List[str], doc_norms:np.ndarray, vectorizer) -> np.ndarray:
   cossim = np.sqrt(get_cosine_similarity(query, td_mat, inv_idx, terms, doc_norms))
   title_sim = get_title_sim(query, df["name"])

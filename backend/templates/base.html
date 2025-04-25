@@ -77,15 +77,18 @@ function answerBoxTemplate(row) {
                     })' 
                     onmouseout='hideGraph()'>&#9432;</p>
             </div>
+            <div class='card-arrow'>
+                <p class="right-arrow">&rsaquo;</p>
+            </div>
         </div></a>
       </div>`;
     }
     function showGraph(event, row) {
       const data = [
-        { name: "Title Sim", value: Number(row.titleSim * 35).toFixed(2) },
-        { name: "Desc Sim", value: Number(row.cossim * 30).toFixed(2) },
-        { name: "SVD Sim", value: Number(row.svdSim * 25).toFixed(2) },
-        { name: "Social Sim", value: Number(row.socialScore * 10).toFixed(2) },
+        { name: "Title Sim", value: Number(row.titleSim * 100).toFixed(2) },
+        { name: "Desc Sim", value: Number(row.cossim * 100).toFixed(2) },
+        { name: "SVD Sim", value: Number(row.svdSim * 100).toFixed(2) },
+        { name: "Social Sim", value: Number(row.socialScore * 100).toFixed(2) },
       ];
 
       const tooltipWidth = 240;  // same as your SVG width
