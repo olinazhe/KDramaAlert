@@ -7,6 +7,7 @@ import math
 import pandas as pd
 from pandas import DataFrame
 from nltk.stem import PorterStemmer
+from sklearn.utils.extmath import randomized_svd
 
 def preprocess(text):
     stemmer = PorterStemmer()
@@ -46,7 +47,7 @@ def strip_text(text: str, regex: str = r"\w+(?:'\w+)?") -> List[str]:
   
   return re.findall(regex, text.lower())
 
-def _build_vectorizer(max_features, stop_words, max_df=0.95, min_df=5, norm='l2'):
+def _build_vectorizer(max_features, stop_words, max_df=0.6, min_df=1, norm='l2'):
   """
   Returns a TfidfVectorizer object with the above preprocessing properties.
   """
@@ -103,4 +104,28 @@ def drama_name_to_index(docs_df):
     res[row["name"]] = index
   return res
 
+def svd_prepreprocessing(df, vectorizer):
+  korean_names = set([
+    "kim", "lee", "park", "choi", "jung", "kang", "cho", "yoon", "jang", "im",
+    "oh", "han", "seo", "shin", "kwon", "hwang", "ryu", "baek", "nam", "song",
+    "hong", "yang", "an", "jeon", "lim", "ha", "no", "gu", "ma", "bang", "seok",
+    "min", "joon", "ji", "hyun", "young", "seong", "jin", "myung", "tae", "woo",
+    "soo", "hoon", "eun", "hye", "yoon", "hwan", "yeon", "in", "kyu", "byung",
+    "chan", "sang", "dong", "il", "ki", "geun", "nam", "won", "ha", "hae",
+    "mi", "na", "ra", "ah", "eun", "hye", "yeon", "hee", "kyung", "so", "jung",
+    "da", "bo", "a", "seul", "yu", "chae", "rin", "su", "seo", "joo", "bin",
+    "ye", "ga", "sa", "ha", "hwa", "ri", "ara", "do", "i", "bi", "nari",
+    "jae", "ho", "hyuk", "seok", "hyun", "beom", "sik", "chul", "taek", "gyoon",
+    "man", "rok", "hak", "wook", "jong", "kyoo", "suk", "shik", "geon", "yeop",
+    "cheol", "bok", "mun", "pil", "jin", "han", "dong", "seung", "yong", "gyu",
+    "geu", "roo", "shi", "lee", "yeo", "ri", "cha", "jo", "sung", "dae", "seon", "bong", "yeol"
+    ,"yi","yoo","moo","se", "yeong", "goo", "ri", "ja", "ri"]
+  )
 
+  def clean_synopsis(text):
+      return " ".join(word for word in strip_text(text) if word.lower() not in korean_names)
+  df["svd_synopsis"] = df["synopsis"].apply(clean_synopsis).apply(preprocess)
+  td_matrix = vectorizer.fit_transform(df["svd_synopsis"])
+  docs_compressed, _, words_compressed = randomized_svd(td_matrix, n_components=20, random_state=42)
+  words_compressed = words_compressed.transpose()
+  return docs_compressed, words_compressed

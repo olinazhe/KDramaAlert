@@ -23,6 +23,7 @@ with open(json_file_path, 'r') as file:
     vectorizer, synopsis_td_mat, terms = preprocessing.build_td_mat(kdramas_df)
     inv_idx = preprocessing.build_inverted_index(synopsis_td_mat, terms)
     doc_norms = preprocessing.compute_doc_norms(synopsis_td_mat)
+    docs_compressed, words_compressed = preprocessing.svd_prepreprocessing(kdramas_df, vectorizer)
 
 
 app = Flask(__name__)
@@ -35,7 +36,7 @@ def home():
 @app.route("/episodes")
 def episodes_search():
     text = request.args.get("title")
-    return similarity.get_sim(text.lower(), kdramas_df, synopsis_td_mat, inv_idx, terms, doc_norms, vectorizer)
+    return similarity.get_sim(text.lower(), kdramas_df, synopsis_td_mat, inv_idx, terms, doc_norms, vectorizer, docs_compressed, words_compressed)
 
 @app.route("/<id>")
 def drama(id):
