@@ -45,7 +45,7 @@ def drama(id):
 
 @app.route("/drama/<id>")
 def drama_details(id):
-    return jsonify(similarity.get_drama_details(id, kdramas_df, synopsis_td_mat))
+    return jsonify(similarity.get_drama_details(id, kdramas_df, synopsis_td_mat, docs_compressed, vectorizer, words_compressed))
 
 if 'DB_NAME' not in os.environ:
     app.run(debug=True,host="0.0.0.0",port=3000)
