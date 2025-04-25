@@ -417,10 +417,11 @@ body {
 .single-drama-container {
   display: flex;
   flex-direction: row;
-  padding: 100px 160px;
+  padding: 100px 160px 60px 160px;
   gap: 80px;
   background-color: #ebfaff;
   font-family: "Inter", sans-serif;
+  align-items: center;
 }
 
 .single-drama-row-1 {
