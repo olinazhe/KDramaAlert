@@ -84,7 +84,7 @@
         },
       })
         .then((res) => res.json())
-        .then((res) => createPage(res));
+        .then((res) => createPage(res.details));
     }
 
     fetchDrama(drama);
