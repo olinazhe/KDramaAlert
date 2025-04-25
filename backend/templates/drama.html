@@ -35,7 +35,7 @@
               drama.synopsis
             }</p>
             <div class='drama-genres-tags-list'>
-            <p>Genres:</p>
+            <p class='single-drama-synopsis'>Genres:</p>
 
   ${drama.genres
     .map((genre) => `<p class='drama-genres-1'>${genre}</p>`)
@@ -51,7 +51,7 @@
             </div>
     
               <div class='drama-genres-tags-list'>
-                <p>Latent Dimensions:</p>
+                <p class='single-drama-synopsis'>Latent Dimensions:</p>
                 ${latent
                   .map(
                     (word) =>
