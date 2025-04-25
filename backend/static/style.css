@@ -254,8 +254,8 @@ body {
   transition: opacity 0.3s ease;
   opacity: 1;
   border-radius: 12px;
-  width: 300px;
-  height: 422px;
+  width: 250px;
+  height: auto;
 }
 
 
@@ -478,6 +478,7 @@ body {
   margin-top: 0px;
   margin-bottom: 0px;
   padding-top: 60px;
+  padding-bottom: 100px;
   background-color: #c6e1eb;
   font-family: "Inter", sans-serif;
   width: 100%;
@@ -487,7 +488,7 @@ body {
   color: #465973;
   font-size: 24px;
   font-style: normal;
-  font-weight: 600;
+  font-weight: 400;
   line-height: normal;
   margin: 0;
 }
