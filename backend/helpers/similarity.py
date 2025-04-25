@@ -152,10 +152,17 @@ def get_top_latent_dims(query:str, vectorizer, td_matrix: np.ndarry):
     valid_dims = [1,2,3,4,5,6,8,11,12,13,16,17,18,19]
     query_vec = query_vec[valid_dims]
     indices = np.argsort(query_vec)[-3:][::-1]
+
+    word_to_index = vectorizer.vocabulary_    
+    index_to_word = {i:t for t,i in word_to_index.items()}
+    list_of_asorts = [ np.argsort(-words_compressed[:,index].squeeze()) for index in indices]
+    latent_words = [ [index_to_word[i] for i in asort[:20]] for asort in list_of_asorts]
+
     index_to_genre = {0: "School", 1: "Romance", 2: "Family", 3:"Historical", 4: "Drama", 5: "Thriller", 6: "Life", 7: 'Chaebol', 8:"Medical", 9:"Friends", 10: "Law", 11:"Daughter/Mother", 12:"College", 13:"Father/Son"}
+
     genres = [index_to_genre[index] for index in indices]
     values = query_vec[indices]
-    return list(zip(genres, values))
+    return list(zip(genres, values, latent_words))
 
 
 def get_sim(query:str, df: pd.DataFrame, td_mat: np.ndarray, inv_idx: dict, terms: List[str], doc_norms:np.ndarray, vectorizer) -> np.ndarray:
