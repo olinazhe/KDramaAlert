@@ -78,6 +78,8 @@ def get_title_sim(query: str, titles: List[str]) -> np.ndarray:
     """
     Returns the similarity between a query and each title using Jaccard similarity in the range [0, 1].
     """
+    if query == "":
+       return [0]*len(titles)
     query_tokens = set(query.lower().split(" "))
     result = np.zeros((len(titles),))
 
