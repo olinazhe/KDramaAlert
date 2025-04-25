@@ -54,7 +54,7 @@
           />
         </div>
       </div>
-      <p id="latent-dimension"></p>
+      <div id="latent-dimension"></div>
       <div id="answer-box"></div>
     </div>
 
@@ -208,14 +208,9 @@
           )
             .then((response) => response.json())
             .then((data) => {
-              document.getElementById(
-                "latent-dimension"
-              ).innerHTML = `Looking for latent dimensions: ${data.dims
-                .map((dim) => `<p class='latent-chips'>${dim[0]}</p>`)
-                .join("")}`;
-
               const results = data.results;
               if (results.length === 0) {
+                document.getElementById("latent-dimension").classList.remove("visible");
                 document.getElementById("answer-box").classList.add("visible");
                 document.getElementById("answer-box").innerHTML =
                   "<div class='no-results'><p>Sorry, no results found :(<p></div>";
@@ -225,6 +220,11 @@
 
                 return;
               } else {
+                document.getElementById(
+                "latent-dimension"
+              ).innerHTML = `Looking for latent dimensions: ${data.dims
+                .map((dim) => `<p class='latent-chips'>${dim[0]}</p>`)
+                .join("")}`;
                 results.forEach((row, index) => {
                   if (index >= 24) {
                     return;
@@ -235,6 +235,7 @@
                 });
               }
               document.getElementById("answer-box").classList.add("visible");
+              document.getElementById("latent-dimension").classList.add("visible");
               document
                 .getElementById("latent-dimension")
                 .scrollIntoView({ behavior: "smooth" });
