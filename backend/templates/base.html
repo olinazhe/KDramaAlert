@@ -67,6 +67,8 @@
           .then((data) => {
             if (data.length === 0) {
               document.getElementById("answer-box").innerHTML = "<div class='no-results'><p>Sorry, no results found :(<p></div>";
+              document.getElementById("answer-box").scrollIntoView({ behavior: "smooth" });
+
               return;
             }
             else{
@@ -79,6 +81,7 @@
                 document.getElementById("answer-box").appendChild(tempDiv);
               });
             }
+            document.getElementById("answer-box").classList.add("visible");
             document.getElementById("answer-box").scrollIntoView({ behavior: "smooth" });
           });
         }
