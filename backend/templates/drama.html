@@ -4,8 +4,9 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link
-    href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
-    rel="stylesheet">
+  href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+  rel="stylesheet"
+/>
 <body>
   <div class="full-body-container">
     <div id="container"></div>
@@ -14,7 +15,7 @@
   <script>
     const drama = "{{drama}}";
 
-    function pageTemplate(drama) {
+    function pageTemplate(drama, latent) {
       return `<div class='single-drama-container'>
           <img src=${drama.img} class='drama-image-1'>
           <div class='single-drama-info'>
@@ -30,8 +31,12 @@
               <p class='no-margin'>${drama.year}</p>
               <p class='no-margin'>${drama.episodeCount}</p>
             </div>
-            <p class='single-drama-synopsis'>${drama.synopsis}</p>
+            <p id="drama-synopsis" class='single-drama-synopsis'>${
+              drama.synopsis
+            }</p>
             <div class='drama-genres-tags-list'>
+            <p>Genres:</p>
+
   ${drama.genres
     .map((genre) => `<p class='drama-genres-1'>${genre}</p>`)
     .join("")}
@@ -45,6 +50,15 @@
     </div>
             </div>
     
+              <div class='drama-genres-tags-list'>
+                <p>Latent Dimensions:</p>
+                ${latent
+                  .map(
+                    (word) =>
+                      `<p class='single-drama-latent-chips'>${word[0]}</p>`
+                  )
+                  .join("")}
+              </div>
           </div>
         </div>
         <div id="container2" class='recommend-drama-container'>
@@ -52,27 +66,37 @@
         `;
     }
 
-    function createPage(drama) {
-      document.getElementById("container").innerHTML = pageTemplate(drama);
+    function createPage(drama, latent) {
+      document.getElementById("container").innerHTML = pageTemplate(
+        drama,
+        latent
+      );
       document.getElementById("container2").innerHTML =
         createRecommendedGenreSection(drama.similarDramas);
+ 
     }
 
     function createRecommendedGenreSection(genres) {
-      return genres.map(
-        (genre) => `<div class='recommend-drama-section'> 
-          <h3 class='recommend-drama-header'>Other Similar <strong>${genre[0]}</strong> K-Dramas</h3>
+      return genres
+        .map(
+          (genre) => `<div class='recommend-drama-section'> 
+          <h3 class='recommend-drama-header'>Other Similar <strong>${
+            genre[0]
+          }</strong> K-Dramas</h3>
           <div class='recommend-drama-list'>
-            ${genre[1].map(
-              (row) =>
-                `<div><a href='${row.id}' target='_blank'>
+            ${genre[1]
+              .map(
+                (row) =>
+                  `<div><a href='${row.id}' target='_blank'>
                     <img class='drama-image-2' src=${row.img}> 
                     </a>
                   </div>`
-            ).join("")}
+              )
+              .join("")}
             </div>
         </div>`
-      ).join("");
+        )
+        .join("");
     }
 
     function fetchDrama(id) {
@@ -82,7 +106,7 @@
         },
       })
         .then((res) => res.json())
-        .then((res) => createPage(res.details));
+        .then((res) => createPage(res.details, res.latentWords));
     }
 
     fetchDrama(drama);

@@ -27,7 +27,6 @@ body {
   max-width: 100vw;
 }
 
-
 #dark-blue {
   color: #86abdc;
 }
@@ -246,9 +245,6 @@ body {
   height: 422px;
 }
 
-
-
-
 /* .drama-info {
     display: flex;
     width: 310px;
@@ -457,6 +453,25 @@ body {
 .single-drama-heart {
   width: 36px;
   height: auto;
+}
+
+.single-drama-latent-chips {
+  font-family: "Inter", sans-serif;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin: 0px;
+  display: flex;
+  padding: 4px 16px;
+  justify-content: center;
+  align-items: center;
+  border-radius: 48px;
+  background: #c6e1eb;
+}
+
+.latent-word {
+  color: red;
 }
 
 .recommend-drama-container {
