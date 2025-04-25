@@ -122,6 +122,10 @@ def get_sim(query:str, df: pd.DataFrame, td_mat: np.ndarray, inv_idx: dict, term
   social_score = get_social_score(df["score"])
   weighted_sim = (cossim * 0.3 + title_sim * 0.35 + svd_sim * 0.25 + social_score * 0.1) * 100
   
+  df['cossim'] = cossim
+  df['titleSim'] = title_sim
+  df['svdSim'] = svd_sim
+  df['socialScore'] = social_score
   df['simScore'] = weighted_sim
   best_match_indices = np.argsort(weighted_sim)[::-1]
   best_matches = df.iloc[best_match_indices]
