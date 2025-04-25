@@ -124,7 +124,7 @@ def svd_prepreprocessing(df, vectorizer):
 
   def clean_synopsis(text):
       return " ".join(word for word in strip_text(text) if word.lower() not in korean_names)
-  df["svd_synopsis"] = df["synopsis"].apply(clean_synopsis).apply(preprocess)
+  df["svd_synopsis"] = df["synopsis"].apply(clean_synopsis)
   td_matrix = vectorizer.fit_transform(df["svd_synopsis"])
   docs_compressed, _, words_compressed = randomized_svd(td_matrix, n_components=20, random_state=42)
   words_compressed = words_compressed.transpose()
