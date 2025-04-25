@@ -5,7 +5,6 @@ import pandas as pd
 from scipy.sparse.linalg import svds
 from sklearn.preprocessing import normalize
 from nltk.stem import PorterStemmer
-from sklearn.utils.extmath import randomized_svd
 import json
 
 def preprocess(text):
@@ -103,25 +102,15 @@ def get_social_score(ratings: List[str]) -> np.ndarray:
        result[i] = float(rating)/10
     return result
 
-def svd(query, vectorizer, td_matrix):
-  docs_compressed, _, words_compressed = randomized_svd(td_matrix, n_components=20, random_state=42)
-  words_compressed = words_compressed.transpose()
-  td_matrix_np = td_matrix.transpose()
-  td_matrix_np = normalize(td_matrix_np)
-
+def svd(query, vectorizer, docs_compressed, words_compressed):
   query_tfidf = vectorizer.transform([query]).toarray()
-
   query_vec = normalize(np.dot(query_tfidf, words_compressed)).squeeze()
 
   docs_compressed_normed = normalize(docs_compressed)
   sims = np.clip(docs_compressed_normed.dot(query_vec), 0, None)
   return sims
 
-def get_svd_features(query, vectorizer, td_matrix):
-  docs_compressed, s, words_compressed = randomized_svd(td_matrix, n_components=20, random_state=42)
-  words_compressed = words_compressed.transpose()
-  td_matrix_np = td_matrix.transpose()
-  td_matrix_np = normalize(td_matrix_np)
+def get_svd_features(query, vectorizer, docs_compressed, words_compressed):
   query = "daily life"
   query_tfidf = vectorizer.transform([query]).toarray()
   print(query_tfidf.shape)
@@ -138,12 +127,8 @@ def get_svd_features(query, vectorizer, td_matrix):
     print([index_to_word[i] for i in asort[:20]])
     print()
 
-def get_top_latent_dims(query:str, vectorizer, td_matrix: np.ndarry):
-    docs_compressed, _, words_compressed = randomized_svd(td_matrix, n_components=20, random_state=42)
-    words_compressed = words_compressed.transpose()
-    td_matrix_np = td_matrix.transpose()
-    td_matrix_np = normalize(td_matrix_np)
-
+def get_top_latent_dims(query:str, vectorizer, words_compressed):
+    
     query_tfidf = vectorizer.transform([query]).toarray()
 
     query_vec = normalize(np.dot(query_tfidf, words_compressed)).squeeze()
@@ -165,10 +150,10 @@ def get_top_latent_dims(query:str, vectorizer, td_matrix: np.ndarry):
     return list(zip(genres, values, latent_words))
 
 
-def get_sim(query:str, df: pd.DataFrame, td_mat: np.ndarray, inv_idx: dict, terms: List[str], doc_norms:np.ndarray, vectorizer) -> np.ndarray:
+def get_sim(query:str, df: pd.DataFrame, td_mat: np.ndarray, inv_idx: dict, terms: List[str], doc_norms:np.ndarray, vectorizer, docs_compressed, words_compressed) -> np.ndarray:
   cossim = np.sqrt(get_cosine_similarity(query, td_mat, inv_idx, terms, doc_norms))
   title_sim = get_title_sim(query, df["name"])
-  svd_sim = svd(query, vectorizer, td_mat)
+  svd_sim = svd(query, vectorizer, docs_compressed, words_compressed)
   social_score = get_social_score(df["score"])
   weighted_sim = (cossim * 0.3 + title_sim * 0.35 + svd_sim * 0.25 + social_score * 0.1) * 100
   
