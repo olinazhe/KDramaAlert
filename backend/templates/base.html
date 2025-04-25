@@ -52,8 +52,9 @@
 
   <script>
 
+
 function answerBoxTemplate(row) {
-      return `<div class='result-card'>
+      return `<div class='result-card'><a href='${row.id}' target='_blank'>
         <img src=${row.img} class='drama-image'>
         <div class='drama-info'>
             <h3 class='drama-title'>${row.name}</h3>
@@ -76,10 +77,7 @@ function answerBoxTemplate(row) {
                     })' 
                     onmouseout='hideGraph()'>&#9432;</p>
             </div>
-            <div class='card-arrow'>
-                <p class="right-arrow">&rsaquo;</p>
-            </div>
-        </div>
+        </div></a>
       </div>`;
     }
     function showGraph(event, row) {
