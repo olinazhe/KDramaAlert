@@ -389,6 +389,7 @@ body {
   flex-direction: column;
   gap: 24px;
   margin: 12px 120px;
+  margin-right: 0px;
   background-color: #c6e1eb;
   font-family: "Inter", sans-serif;
 }
@@ -401,10 +402,21 @@ body {
   line-height: normal;
 }
 
+.recommend-drama-header h3 {
+  margin: 0px;
+}
+
 .recommend-drama-section {
   display: flex;
   gap: 24px;
+  flex-direction: column;
 }
+
+.recommend-drama-list {
+  display: flex;
+  gap: 24px;
+}
+
 .sim-score {
   display: flex;
   align-items: center;

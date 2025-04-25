@@ -6,6 +6,7 @@ from scipy.sparse.linalg import svds
 from sklearn.preprocessing import normalize
 from nltk.stem import PorterStemmer
 from sklearn.utils.extmath import randomized_svd
+import json
 
 def preprocess(text):
     stemmer = PorterStemmer()
@@ -152,3 +153,23 @@ def get_sim(query:str, df: pd.DataFrame, td_mat: np.ndarray, inv_idx: dict, term
   best_matches = df.iloc[best_match_indices]
   best_matches = best_matches[best_matches['simScore'] > 9.2]
   return best_matches.to_json(orient="records")
+
+def get_top_dramas_by_genre(df: pd.DataFrame, genre: str, id: str, td_matrix: np.ndarray) -> List[dict]:
+    """
+    Returns the top 5 dramas for a given genre.
+    """
+
+    doc_sims = np.dot(td_matrix, td_matrix[int(id)])
+    sim_docs = np.argsort(-doc_sims)
+    matches = df.iloc[sim_docs]
+    matches = matches[matches['id'] != int(id)]
+    matches = matches[matches['genres'].apply(lambda x: genre in x)].head(4)
+
+    return matches.to_dict(orient='records')
+
+def get_drama_details(id, df: pd.DataFrame, td_matrix: np.ndarray):
+    initial_details = df.iloc[[int(id)]].to_json(orient="records")
+    initial_details = json.loads(initial_details)[0]
+    similar_dramas = [[genre, get_top_dramas_by_genre(df, genre, id, td_matrix)] for genre in initial_details["genres"]]
+    initial_details["similarDramas"] = similar_dramas
+    return initial_details
