@@ -4,9 +4,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
 <link
-  href="https://fonts.googleapis.com/css2?family=Kanit&family=Montserrat&family=Open+Sans:wght@500&display=swap"
-  rel="stylesheet"
-/>
+    href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+    rel="stylesheet">
 <body>
   <div class="full-body-container">
     <div id="container"></div>
@@ -17,13 +16,14 @@
 
     function pageTemplate(drama) {
       return `<div class='single-drama-container'>
-          <img src=${drama.img} class='drama-image'>
+          <img src=${drama.img} class='drama-image-1'>
           <div class='single-drama-info'>
             <div class='single-drama-row single-drama-row-1'>
-              <h3 class='no-margin'>${drama.name}</h3>
+              <p class='no-margin'>${drama.name}</p>
               <div class='rating-with-image'>
-                <img src="{{ url_for('static', filename='images/heart.svg') }}" class='single-drama-heart' />
                 <p class='no-margin'>${drama.score}/10</p>
+                <img src="{{ url_for('static', filename='images/heart.svg') }}" class='single-drama-heart' />
+
               </div>
             </div>
             <div class='single-drama-row single-drama-row-2'>
