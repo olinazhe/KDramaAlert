@@ -52,8 +52,9 @@
 
   <script>
 
+
 function answerBoxTemplate(row) {
-      return `<div class='result-card'>
+      return `<div class='result-card'><a href='${row.id}' target='_blank'>
         <img src=${row.img} class='drama-image'>
         <div class='drama-info'>
             <h3 class='drama-title'>${row.name}</h3>
@@ -79,15 +80,15 @@ function answerBoxTemplate(row) {
             <div class='card-arrow'>
                 <p class="right-arrow">&rsaquo;</p>
             </div>
-        </div>
+        </div></a>
       </div>`;
     }
     function showGraph(event, row) {
       const data = [
-        { name: "Title Sim", value: Number(row.titleSim * 35).toFixed(2) },
-        { name: "Desc Sim", value: Number(row.cossim * 30).toFixed(2) },
-        { name: "SVD Sim", value: Number(row.svdSim * 25).toFixed(2) },
-        { name: "Social Sim", value: Number(row.socialScore * 10).toFixed(2) },
+        { name: "Title Sim", value: Number(row.titleSim * 100).toFixed(2) },
+        { name: "Desc Sim", value: Number(row.cossim * 100).toFixed(2) },
+        { name: "SVD Sim", value: Number(row.svdSim * 100).toFixed(2) },
+        { name: "Social Sim", value: Number(row.socialScore * 100).toFixed(2) },
       ];
 
       const tooltipWidth = 240;  // same as your SVG width

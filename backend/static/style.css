@@ -49,7 +49,7 @@ body {
   align-items: center;
   margin-top: 10px;
   padding: 12px;
-  width: 708px;
+  width: 625px;
   background-color: #fff;
 }
 
@@ -228,6 +228,10 @@ body {
   opacity: 0;
 }
 
+.result-card a {
+  color: #465973;
+}
+
 .drama-genres-tags-list {
   display: flex;
   align-items: center;
@@ -332,6 +336,7 @@ body {
   padding: 60px 120px;
   gap: 100px;
   background-color: #ebfaff;
+  font-family: "Inter", sans-serif;
 }
 
 .single-drama-row-1 {
@@ -385,6 +390,7 @@ body {
   gap: 24px;
   margin: 12px 120px;
   background-color: #c6e1eb;
+  font-family: "Inter", sans-serif;
 }
 
 .recommend-drama-header {
