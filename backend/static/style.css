@@ -7,10 +7,7 @@ body {
 }
 
 .full-body-container {
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
+  margin: 0;
   width: 100%;
   min-height: 100vh;
   display: flex;
@@ -19,6 +16,17 @@ body {
   flex-direction: column;
   color: #465973;
 }
+
+#container {
+  margin: 0;
+  width: 100%;
+}
+
+#container2 {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
 
 #dark-blue {
   color: #86abdc;
@@ -217,14 +225,29 @@ body {
   transition: opacity 0.3s ease;
   opacity: 1;
 }
+
 .drama-image-1 {
-  width: 100%;
-  height: 100%;
+  width: 300px;
+  height: 422px;
   object-fit: cover;
   display: block;
   transition: opacity 0.3s ease;
   opacity: 1;
+  border-radius: 12px;
 }
+
+.drama-image-2 {
+  object-fit: cover;
+  display: block;
+  transition: opacity 0.3s ease;
+  opacity: 1;
+  border-radius: 12px;
+  width: 300px;
+  height: 422px;
+}
+
+
+
 
 /* .drama-info {
     display: flex;
@@ -382,7 +405,7 @@ body {
 .single-drama-container {
   display: flex;
   flex-direction: row;
-  padding: 100px 200px;
+  padding: 100px 160px;
   gap: 80px;
   background-color: #ebfaff;
   font-family: "Inter", sans-serif;
@@ -419,6 +442,7 @@ body {
   flex-direction: row;
   justify-content: space-between;
   align-items: start;
+  gap: 24px;
 }
 
 .single-drama-synopsis {
@@ -438,11 +462,13 @@ body {
 .recommend-drama-container {
   display: flex;
   flex-direction: column;
-  gap: 24px;
-  margin: 12px 120px;
-  margin-right: 0px;
+  gap: 60px;
+  margin-top: 0px;
+  margin-bottom: 0px;
+  padding-top: 60px;
   background-color: #c6e1eb;
   font-family: "Inter", sans-serif;
+  width: 100%;
 }
 
 .recommend-drama-header {
@@ -451,6 +477,7 @@ body {
   font-style: normal;
   font-weight: 600;
   line-height: normal;
+  margin: 0;
 }
 
 .recommend-drama-header h3 {
@@ -458,14 +485,18 @@ body {
 }
 
 .recommend-drama-section {
+  padding-left: 160px;
+  padding-right: 160px;
   display: flex;
   gap: 24px;
   flex-direction: column;
+  overflow-x: hidden;
 }
 
 .recommend-drama-list {
   display: flex;
   gap: 24px;
+  overflow-x: auto;
 }
 
 .sim-score {
