@@ -310,3 +310,77 @@ body{
   text-align: center;
   padding-top: 40px;
 }
+
+.single-drama-container {
+  display: flex;
+  flex-direction: row;
+  padding: 60px 120px;
+  gap: 100px;
+  background-color: #ebfaff;
+}
+
+.single-drama-row-1 {
+  color: #465973;
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+
+.no-margin {
+  margin: 0px;
+}
+
+.single-drama-row-2 {
+  color: #465973;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.single-drama-info {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.single-drama-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.single-drama-synopsis {
+  color: #465973;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+}
+
+.single-drama-heart {
+  width: 40px;
+  height: auto;
+}
+
+.recommend-drama-container {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  margin: 12px 120px;
+  background-color: #c6e1eb;
+}
+
+.recommend-drama-header {
+  color: #465973;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 700;
+  line-height: normal;
+}
+
+.recommend-drama-section {
+  display: flex;
+  gap: 24px;
+}
