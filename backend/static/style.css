@@ -253,18 +253,21 @@ body {
 
 .drama-networks {
   display: flex;
-  justify-content: center;
   align-items: center;
   gap: 12px;
+  flex-wrap: wrap;
+  row-gap: 8px;
 }
 
 .drama-networks-text {
   font-family: "Inter", sans-serif;
-  font-size: 18px;
+  font-size: 16px;
   font-style: normal;
   font-weight: 400;
   line-height: normal;
   margin: 0px;
+  display: flex;
+  justify-content: center;
 }
 
 .drama-title-rating {

@@ -31,6 +31,16 @@
               <p class='no-margin'>${drama.episodeCount}</p>
             </div>
             <p class='single-drama-synopsis'>${drama.synopsis}</p>
+            <div class='drama-genres-tags-list'>
+  ${drama.genres.map(genre => `<p class='drama-genres'>${genre}</p>`).join("")}
+</div>
+<div class='rating-with-image'>
+                <img src="{{ url_for('static', filename='images/movieicon.svg') }}" />
+                <div class='drama-networks'>
+      ${drama.network.map(network => `<p class='drama-networks-text'>${network}</p>`).join("")}
+    </div>
+            </div>
+    
           </div>
         </div>
         <div class='recommend-drama-container'>
