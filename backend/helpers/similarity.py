@@ -178,7 +178,7 @@ def get_top_dramas_by_genre(df: pd.DataFrame, genre: str, id: str, td_matrix: np
     sim_docs = np.argsort(-doc_sims)
     matches = df.iloc[sim_docs]
     matches = matches[matches['id'] != int(id)]
-    matches = matches[matches['genres'].apply(lambda x: genre in x)].head(4)
+    matches = matches[matches['genres'].apply(lambda x: genre in x)].head(8)
 
     return matches.to_dict(orient='records')
 

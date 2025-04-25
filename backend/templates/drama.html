@@ -33,7 +33,7 @@
             <p class='single-drama-synopsis'>${drama.synopsis}</p>
             <div class='drama-genres-tags-list'>
   ${drama.genres
-    .map((genre) => `<p class='drama-genres'>${genre}</p>`)
+    .map((genre) => `<p class='drama-genres-1'>${genre}</p>`)
     .join("")}
 </div>
 <div class='rating-with-image'>
@@ -53,11 +53,9 @@
     }
 
     function createPage(drama) {
-      let tempDiv = document.createElement("div");
-      tempDiv.innerHTML = pageTemplate(drama);
-      document.getElementById("container").appendChild(tempDiv);
+      document.getElementById("container").innerHTML = pageTemplate(drama);
       document.getElementById("container2").innerHTML =
-        createRecommendedGenreSection(drama.similarDramas).join("");
+        createRecommendedGenreSection(drama.similarDramas);
     }
 
     function createRecommendedGenreSection(genres) {
@@ -65,16 +63,16 @@
         (genre) => `<div class='recommend-drama-section'> 
           <h3 class='recommend-drama-header'>Other Similar <strong>${genre[0]}</strong> K-Dramas</h3>
           <div class='recommend-drama-list'>
-                ${genre[1].map(
-                  (row) =>
-                    `<div><a href='${row.id}' target='_blank'>
-                        <img src=${row.img}> 
-                        </a>
-                      </div>`
-                )}
-                </div>
+            ${genre[1].map(
+              (row) =>
+                `<div><a href='${row.id}' target='_blank'>
+                    <img class='drama-image-2' src=${row.img}> 
+                    </a>
+                  </div>`
+            ).join("")}
+            </div>
         </div>`
-      );
+      ).join("");
     }
 
     function fetchDrama(id) {
