@@ -46,4 +46,4 @@ def drama_details(id):
     return kdramas_df.iloc[[int(id)]].to_json(orient="records")
 
 if 'DB_NAME' not in os.environ:
-    app.run(debug=True,host="0.0.0.0",port=5000)
+    app.run(debug=True,host="0.0.0.0",port=3000)

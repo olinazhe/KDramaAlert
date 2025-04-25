@@ -6,7 +6,11 @@ from collections import defaultdict
 import math
 import pandas as pd
 from pandas import DataFrame
+from nltk.stem import PorterStemmer
 
+def preprocess(text):
+    stemmer = PorterStemmer()
+    return ' '.join([stemmer.stem(word) for word in text.lower().split()])
 
 def process_data(data):
   kdramas_df = pd.DataFrame(data)
@@ -54,7 +58,8 @@ def build_td_mat(df: DataFrame) -> Tuple[TfidfVectorizer, np.ndarray, list]:
   Returns the term document matrix along with the terms that represent each column.
   """
   vectorizer = _build_vectorizer(7500, "english")
-  synopsis_td_mat = vectorizer.fit_transform(df["synopsis"]).toarray()
+  preprocessed_synopses = df["synopsis"].apply(preprocess)
+  synopsis_td_mat = vectorizer.fit_transform(preprocessed_synopses).toarray()
   terms = list(vectorizer.get_feature_names_out())
   return vectorizer, synopsis_td_mat, terms
 

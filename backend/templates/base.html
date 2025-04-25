@@ -42,7 +42,7 @@
                       (genres) => `<p class='drama-genres'>${genres}</p>`
                   ).join("")}
               </div>
-              <p class='drama-desc'>Similarity: ${Number((row.simScore).toFixed(4))}%</p>
+              <p class='drama-desc'>Similarity: ${Number((row.simScore).toFixed(2))}%</p>
               <div class='card-arrow'>
                   <img src="{{ url_for('static', filename='images/right_arrow.png') }}" class='arrow-img' />
               </div>
@@ -65,14 +65,20 @@
         )
           .then((response) => response.json())
           .then((data) => {
-            data.forEach((row, index) => {
-              if (index >= 24) {
-                return;
-              }
-              let tempDiv = document.createElement("div");
-              tempDiv.innerHTML = answerBoxTemplate(row);
-              document.getElementById("answer-box").appendChild(tempDiv);
-            });
+            if (data.length === 0) {
+              document.getElementById("answer-box").innerHTML = "<div class='no-results'><p>Sorry, no results found :(<p></div>";
+              return;
+            }
+            else{
+              data.forEach((row, index) => {
+                if (index >= 24) {
+                  return;
+                }
+                let tempDiv = document.createElement("div");
+                tempDiv.innerHTML = answerBoxTemplate(row);
+                document.getElementById("answer-box").appendChild(tempDiv);
+              });
+            }
             document.getElementById("answer-box").scrollIntoView({ behavior: "smooth" });
           });
         }

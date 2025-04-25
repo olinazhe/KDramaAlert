@@ -1,0 +1,198 @@
+.full-body-container {
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  width: 100%;
+  min-height: 100vh;
+  display: flex;
+  justify-content: start;
+  align-items: center;
+  flex-direction: column;
+  background-color: #ecfeff;
+}
+
+#dark-blue {
+  color: #86abdc;
+}
+
+.google-colors {
+  display: flex;
+  align-items: center;
+  font-size: 48px;
+  font-family: "Open Sans", sans-serif;
+}
+
+.google-colors h1 {
+  margin-bottom: 0;
+  margin-right: 3px;
+}
+
+.input-box {
+  border-radius: 50px;
+  border: 3px solid #75b0e8;
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+  padding: 12px;
+  width: 600px;
+  background-color: #fff;
+}
+
+.input-box img {
+  height: 20px;
+  width: 20px;
+}
+
+.top-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.input-box input {
+  width: 100%;
+  margin-left: 10px;
+  font-size: 16px;
+  border: none;
+  outline: 0;
+}
+
+#answer-box {
+  width: 90%;
+  margin-top: 50px;
+}
+
+.drama-title {
+    font-family: "Kanit", sans-serif;
+    color: #000;
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    margin: 0px;
+}
+
+.drama-rating {
+    color: #000;
+    font-family: "Kanit", sans-serif;
+    font-size: 32px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: normal;
+    margin: 0px;
+}
+
+.drama-year {
+    color: #000;
+    font-family: "Montserrat", sans-serif;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin: 0px;
+}
+
+.drama-episodes {
+    color: #000;
+    font-family: "Montserrat", sans-serif;
+    font-size: 24px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin: 0px;
+}
+
+.drama-desc {
+    font-family: "Montserrat", sans-serif;
+    color: #000;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin: 0px;
+}
+
+.result-card {
+    display: flex;
+    padding: 48px 60px;
+    align-items: flex-start;
+    margin-top: 24px;
+    margin-bottom: 24px;
+    gap: 45px;
+    border-color: #000;
+    border-radius: 17.679px;
+    background: #fff;
+}
+
+.drama-image {
+    width: 309.451px;
+    height: 435.295px;
+    flex-shrink: 0;
+    aspect-ratio: 309.45/435.29;
+    margin: 0px;
+}
+
+.drama-info {
+    display: flex;
+    width: 1035px;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 11.797px;
+    font-family: "Montserrat", sans-serif;
+}
+
+.drama-genres-tags-list {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.drama-genres {
+    font-family: "Montserrat", sans-serif;
+    color: #000;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin: 0px;
+
+    display: flex;
+    padding: 6px 18px;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    border-radius: 48px;
+    background: #EBEBEB;
+}
+
+.drama-networks {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+}
+
+.drama-networks-text {
+    font-family: "Montserrat", sans-serif;
+    color: #000;
+    font-size: 18px;
+    font-style: normal;
+    font-weight: 400;
+    line-height: normal;
+    margin: 0px;
+}
+
+.drama-title-rating {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    align-self: stretch;
+}
+
+.drama-year-episodes {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    align-self: stretch;
+}
