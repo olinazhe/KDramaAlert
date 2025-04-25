@@ -1,13 +1,37 @@
 <!DOCTYPE html>
-<title>{% block title %}{% endblock %} - Flaskr</title>
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link
-  href="https://fonts.googleapis.com/css2?family=Kanit&family=Montserrat&family=Open+Sans:wght@500&display=swap"
-  rel="stylesheet"
-/>
+<html lang="en">
+<head>
+  <title>{% block title %}{% endblock %} - Flaskr</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+    rel="stylesheet">
+  <script src="https://d3js.org/d3.v7.min.js"></script>
+  <style>
+    .tooltip-graph {
+      position: absolute;
+      display: none;
+      pointer-events: none;
+      background: white;
+      border: 1px solid #ccc;
+      padding: 10px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+      z-index: 10;
+    }
+    .bar rect {
+      fill: #86abdc;
+    }
+    .bar text {
+      font: 12px sans-serif;
+      fill: #465973;
+    }
+  </style>
+</head>
 <body>
+  <div id="tooltip-graph" class="tooltip-graph"></div>
   <div class="full-body-container">
     <div class="top-text">
       <div class="google-colors">
@@ -27,27 +51,119 @@
   </div>
 
   <script>
-    function answerBoxTemplate(row) {
+
+function answerBoxTemplate(row) {
       return `<div class='result-card'>
-          <img src=${row.img} class='drama-image'>
-          <div class='drama-info'>
-              <h3 class='drama-title'>${row.name}</h3>
-              <div class='rating-with-image'>
-                  <img src="{{ url_for('static', filename='images/heart.svg') }}" />
-                  <p class='drama-rating'>${row.score}/10</p>
-              </div>
-              <p class='drama-desc'>${row.synopsis.length > 280 ? row.synopsis.slice(0, 280) + "..." : row.synopsis}</p>
-              <div class='drama-genres-tags-list'>
-                  ${row.genres.map(
-                      (genres) => `<p class='drama-genres'>${genres}</p>`
-                  ).join("")}
-              </div>
-              <p class='drama-desc'>Similarity: ${Number((row.simScore).toFixed(2))}%</p>
-              <div class='card-arrow'>
-                  <img src="{{ url_for('static', filename='images/right_arrow.png') }}" class='arrow-img' />
-              </div>
-          </div>
+        <img src=${row.img} class='drama-image'>
+        <div class='drama-info'>
+            <h3 class='drama-title'>${row.name}</h3>
+            <div class='rating-with-image'>
+                <img src="{{ url_for('static', filename='images/heart.svg') }}" />
+                <p class='drama-rating'>${row.score}/10</p>
+            </div>
+            <p class='drama-desc'>${row.synopsis.length > 280 ? row.synopsis.slice(0, 280) + "..." : row.synopsis}</p>
+            <div class='drama-genres-tags-list'>
+                ${row.genres.map(genre => `<p class='drama-genres'>${genre}</p>`).join("")}
+            </div>
+            <div class="sim-score">
+                <p class='drama-desc'>Similarity: ${Number(row.simScore.toFixed(2))}%</p>
+                <p class='info-button' 
+                    onmouseover='showGraph(event, {
+                      cossim: ${row.cossim},
+                      titleSim: ${row.titleSim},
+                      svdSim: ${row.svdSim},
+                      socialScore: ${row.socialScore}
+                    })' 
+                    onmouseout='hideGraph()'>&#9432;</p>
+            </div>
+            <div class='card-arrow'>
+                <p class="right-arrow">&rsaquo;</p>
+            </div>
+        </div>
       </div>`;
+    }
+    function showGraph(event, row) {
+      const data = [
+        { name: "Title Sim", value: Number(row.titleSim * 35).toFixed(2) },
+        { name: "Desc Sim", value: Number(row.cossim * 30).toFixed(2) },
+        { name: "SVD Sim", value: Number(row.svdSim * 25).toFixed(2) },
+        { name: "Social Sim", value: Number(row.socialScore * 10).toFixed(2) },
+      ];
+
+      const tooltipWidth = 240;  // same as your SVG width
+      const tooltipHeight = 160; // match your SVG height
+      const offset = 15;
+      
+      const pageX = event.pageX;
+      const pageY = event.pageY;
+
+      const left =
+        pageX + tooltipWidth + offset > window.innerWidth
+          ? pageX - tooltipWidth - offset  // shift left
+          : pageX + offset;                // default right
+
+      const top = pageY - tooltipHeight - 10;
+
+      const container = d3.select("#tooltip-graph");
+      container
+        .style("display", "block")
+        .style("left", `${left}px`)
+        .style("top", `${top}px`);
+
+      container.selectAll("svg").remove();
+
+      const width = 240;
+      const height = 160;
+      const margin = { top: -5, right: 15, bottom: 20, left: 55 };
+
+      const svg = container
+        .append("svg")
+        .attr("width", width)
+        .attr("height", height);
+
+      const x = d3.scaleLinear()
+        .domain([0, 100])
+        .range([margin.left, width - margin.right]);
+
+      const y = d3.scaleBand()
+        .domain(data.map(d => d.name))
+        .range([margin.top, height - margin.bottom])
+        .padding(0.5);
+
+      svg.append("g")
+        .selectAll("rect")
+        .data(data)
+        .join("rect")
+          .attr("x", x(0))
+          .attr("y", d => y(d.name))
+          .attr("width", d => x(d.value) - x(0))
+          .attr("height", y.bandwidth())
+          .attr("fill", "#86abdc");
+
+      svg.append("g")
+        .attr("transform", `translate(${margin.left},0)`)
+        .call(d3.axisLeft(y).tickSize(0))
+        .selectAll("text")
+        .style("font-size", "12px");
+
+      svg.append("g")
+        .attr("transform", `translate(0,${height - margin.bottom})`)
+        .call(d3.axisBottom(x).ticks(4).tickFormat(d => `${d}%`))
+        .selectAll("text")
+        .style("font-size", "10px");
+
+      svg.selectAll("text")
+        .style("fill", "#465973")
+        .style("font-size", "10px")
+        .style("font-family", "Inter"); 
+
+
+      svg.selectAll(".domain, .tick line")
+        .attr("stroke", "#465973");
+    }
+
+    function hideGraph() {
+      d3.select("#tooltip-graph").style("display", "none");
     }
 
     function sendFocus() {
@@ -66,6 +182,7 @@
           .then((response) => response.json())
           .then((data) => {
             if (data.length === 0) {
+              document.getElementById("answer-box").classList.add("visible");
               document.getElementById("answer-box").innerHTML = "<div class='no-results'><p>Sorry, no results found :(<p></div>";
               document.getElementById("answer-box").scrollIntoView({ behavior: "smooth" });
 

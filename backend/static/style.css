@@ -1,4 +1,7 @@
 body{
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-smooth: never;
   background-color: #c6e1eb;
   margin: 0;
 }
@@ -76,7 +79,7 @@ body{
 }
 
 .input-text {
-  font-family: "Montserrat", sans-serif;
+  font-family: "Inter", sans-serif;
   font-size: 24px;
   font-style: normal;
   font-weight: 400;
@@ -111,7 +114,7 @@ body{
 }
 
 .drama-rating {
-    font-family: "Montserrat", sans-serif;
+    font-family: "Inter", sans-serif;
     font-size: 20px;
     margin: 0;
     font-style: normal;
@@ -126,7 +129,7 @@ body{
 }
 
 .drama-year {
-    font-family: "Montserrat", sans-serif;
+    font-family: "Inter", sans-serif;
     font-size: 24px;
     font-style: normal;
     font-weight: 400;
@@ -135,7 +138,7 @@ body{
 }
 
 .drama-episodes {
-    font-family: "Montserrat", sans-serif;
+    font-family: "Inter", sans-serif;
     font-size: 24px;
     font-style: normal;
     font-weight: 400;
@@ -144,7 +147,7 @@ body{
 }
 
 .drama-desc {
-    font-family: "Montserrat", sans-serif;
+    font-family: "Inter", sans-serif;
     font-size: 16px;
     font-style: normal;
     font-weight: 400;
@@ -195,7 +198,7 @@ body{
     flex-direction: column;
     align-items: flex-start;
     gap: 11.797px;
-    font-family: "Montserrat", sans-serif;
+    font-family: "Inter", sans-serif;
 } */
 
 .drama-info {
@@ -210,7 +213,7 @@ body{
   box-sizing: border-box;
   overflow-y: auto;
   transition: opacity 0.3s ease;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Inter', sans-serif;
   font-size: 13px;
   display: flex;
   flex-direction: column;
@@ -234,7 +237,7 @@ body{
 }
 
 .drama-genres {
-    font-family: "Montserrat", sans-serif;
+    font-family: "Inter", sans-serif;
     font-size: 16px;
     font-style: normal;
     font-weight: 400;
@@ -256,7 +259,7 @@ body{
 }
 
 .drama-networks-text {
-    font-family: "Montserrat", sans-serif;
+    font-family: "Inter", sans-serif;
     font-size: 18px;
     font-style: normal;
     font-weight: 400;
@@ -294,13 +297,22 @@ body{
 .arrow-img {
   margin-top: auto;
   margin-bottom: 0;
-  height: 21.01px;
   width: 12px;
+  height: 21.01px;
   margin-left: auto;
 }
 
+.right-arrow {
+  font-size: 24px;
+  color: #465973;
+  font-weight: 400;
+  text-align: right;
+  margin-top: auto;
+  margin-bottom: 0;
+}
+
 .no-results {
-  font-family: "Montserrat", sans-serif;
+  font-family: "Inter", sans-serif;
   font-size: 24px;
   font-style: normal;
   margin: auto;
@@ -309,4 +321,39 @@ body{
   grid-column: 1 / -1;
   text-align: center;
   padding-top: 40px;
+}
+
+.sim-score {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.info-button {
+  margin: 0;
+  font-family: "Inter", sans-serif;
+  font-size: 14px;
+  font-style: bold;
+  font-weight: 400;
+  line-height: normal;
+  margin: 0px;
+}
+
+#tooltip-graph {
+  position: absolute;
+  display: none;           /* Hidden by default */
+  pointer-events: none;    /* So it doesn’t interfere with mouseleave */
+  background:  #EBFAFF;
+  border: none;
+  padding: 10px;
+  border-radius: 8px;
+  z-index: 9999;           /* Ensures it's above other elements */
+  transition: opacity 0.2s ease;
+  min-width: 240px;
+  height: 160px;
+}
+
+#tooltip-graph.visible {
+  display: block;
+  opacity: 1;
 }
