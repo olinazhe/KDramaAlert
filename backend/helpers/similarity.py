@@ -5,6 +5,7 @@ import pandas as pd
 from scipy.sparse.linalg import svds
 from sklearn.preprocessing import normalize
 from nltk.stem import PorterStemmer
+from sklearn.utils.extmath import randomized_svd
 
 def preprocess(text):
     stemmer = PorterStemmer()
@@ -115,6 +116,26 @@ def svd(query, vectorizer, td_matrix):
   sims = np.clip(docs_compressed_normed.dot(query_vec), 0, None)
   return sims
 
+def get_svd_features(query, vectorizer, td_matrix):
+  docs_compressed, s, words_compressed = randomized_svd(td_matrix, n_components=20, random_state=42)
+  words_compressed = words_compressed.transpose()
+  td_matrix_np = td_matrix.transpose()
+  td_matrix_np = normalize(td_matrix_np)
+  query = "daily life"
+  query_tfidf = vectorizer.transform([query]).toarray()
+  print(query_tfidf.shape)
+  print(words_compressed.shape)
+  query_vec = normalize(np.dot(query_tfidf, words_compressed)).squeeze()
+  print(query_vec)
+  docs_compressed_normed = normalize(docs_compressed)
+  word_to_index = vectorizer.vocabulary_
+  index_to_word = {i:t for t,i in word_to_index.items()}
+  for i in range(20):
+    print("Top words in dimension", i)
+    dimension_col = words_compressed[:,i].squeeze()
+    asort = np.argsort(-dimension_col)
+    print([index_to_word[i] for i in asort[:20]])
+    print()
 def get_sim(query:str, df: pd.DataFrame, td_mat: np.ndarray, inv_idx: dict, terms: List[str], doc_norms:np.ndarray, vectorizer) -> np.ndarray:
   cossim = np.sqrt(get_cosine_similarity(query, td_mat, inv_idx, terms, doc_norms))
   title_sim = get_title_sim(query, df["name"])
