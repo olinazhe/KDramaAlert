@@ -32,38 +32,59 @@
             </div>
             <p class='single-drama-synopsis'>${drama.synopsis}</p>
             <div class='drama-genres-tags-list'>
-  ${drama.genres.map(genre => `<p class='drama-genres'>${genre}</p>`).join("")}
+  ${drama.genres
+    .map((genre) => `<p class='drama-genres'>${genre}</p>`)
+    .join("")}
 </div>
 <div class='rating-with-image'>
                 <img src="{{ url_for('static', filename='images/movieicon.svg') }}" />
                 <div class='drama-networks'>
-      ${drama.network.map(network => `<p class='drama-networks-text'>${network}</p>`).join("")}
+      ${drama.network
+        .map((network) => `<p class='drama-networks-text'>${network}</p>`)
+        .join("")}
     </div>
             </div>
     
           </div>
         </div>
-        <div class='recommend-drama-container'>
-          <div class='recommend-drama-section'>
-            <h3 class='recommend-drama-header'>Similar actors</h3>
-          </div>
-          <div class='recommend-drama-section'>
-            <h3 class='recommend-drama-header'>Similar genres</h3>
-          </div>
+        <div id="container2" class='recommend-drama-container'>
         </div>
         `;
-        }
+    }
 
     function createPage(drama) {
       let tempDiv = document.createElement("div");
       tempDiv.innerHTML = pageTemplate(drama);
       document.getElementById("container").appendChild(tempDiv);
+      document.getElementById("container2").innerHTML =
+        createRecommendedGenreSection(drama.similarDramas).join("");
+    }
+
+    function createRecommendedGenreSection(genres) {
+      return genres.map(
+        (genre) => `<div class='recommend-drama-section'> 
+          <h3 class='recommend-drama-header'>Other Similar <strong>${genre[0]}</strong> K-Dramas</h3>
+          <div class='recommend-drama-list'>
+                ${genre[1].map(
+                  (row) =>
+                    `<div><a href='${row.id}' target='_blank'>
+                        <img src=${row.img}> 
+                        </a>
+                      </div>`
+                )}
+                </div>
+        </div>`
+      );
     }
 
     function fetchDrama(id) {
-      fetch("/drama/" + id)
+      fetch("/drama/" + id, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
         .then((res) => res.json())
-        .then((res) => createPage(res[0]));
+        .then((res) => createPage(res));
     }
 
     fetchDrama(drama);

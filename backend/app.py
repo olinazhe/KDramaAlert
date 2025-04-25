@@ -1,6 +1,6 @@
 import json
 import os
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, jsonify
 from flask_cors import CORS
 from helpers import preprocessing, similarity
 import pandas as pd
@@ -43,7 +43,7 @@ def drama(id):
 
 @app.route("/drama/<id>")
 def drama_details(id):
-    return kdramas_df.iloc[[int(id)]].to_json(orient="records")
+    return jsonify(similarity.get_drama_details(id, kdramas_df, synopsis_td_mat))
 
 if 'DB_NAME' not in os.environ:
     app.run(debug=True,host="0.0.0.0",port=3000)
