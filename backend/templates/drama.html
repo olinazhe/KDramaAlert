@@ -79,16 +79,14 @@
       for (let i = 0; i < elements.length; i++) {
         elements[i].addEventListener("mouseenter", () => {
           const synopsisElement = document.getElementById("drama-synopsis");
-          const tokens = drama.synopsis.match(/\b\w+\b/g);;
-          const parts = tokens.map((token, j) => {
-            const word = token.toLowerCase();
+          synopsisElement.innerHTML = drama.synopsis.replace(/\b\w+\b/g, (string) => {
+            const word = string.toLowerCase();
             if (latent[i][2].includes(word)) {
-              return `<span class='latent-word'>${tokens[j]}</span>`;
+              return `<span class='latent-word'>${string}</span>`;
             } else {
-              return tokens[j];
+              return string;
             }
-          });
-          synopsisElement.innerHTML = parts.join(" ");
+          })
         });
         elements[i].addEventListener("mouseleave", () => {
           const synopsisElement = document.getElementById("drama-synopsis");
