@@ -234,3 +234,8 @@ def get_drama_details(id, df: pd.DataFrame, td_matrix: np.ndarray, docs_compress
     values = query_vec[indices]
     return { "details": initial_details, "latentWords": list(zip(genres, values, latent_words))}
     
+def filter_by_tag(kdrama_df, desired_tags):
+   desired_tags = set(desired_tags)
+   filtered_df = kdrama_df[kdrama_df['genres'].apply(lambda tag_list: desired_tags.issubset(set(tag_list.split(", "))))]
+
+   return filtered_df
