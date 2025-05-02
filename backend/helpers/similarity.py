@@ -136,33 +136,18 @@ def get_top_latent_dims(query:str, vectorizer, words_compressed):
     query_vec = normalize(np.dot(query_tfidf, words_compressed)).squeeze()
 
     query_vec = np.array(query_vec)
-    valid_dims = [1,2,3,4,5,6,8,11,12,13,16,17,18,19]
+    valid_dims = [1,2,3,4,5,6,10,12,13,17,18,19]
     query_vec = query_vec[valid_dims]
     indices = np.argsort(query_vec)[-3:][::-1]
-    index_to_index = {
-    0: 1,
-    1: 2,
-    2: 3,
-    3: 4,
-    4: 5,
-    5: 6,
-    6: 8,
-    7: 11,
-    8: 12,
-    9: 13,
-    10: 16,
-    11: 17,
-    12: 18,
-    13: 19
-    }
+    top_valid_dims = [valid_dims[i] for i in indices]
     word_to_index = vectorizer.vocabulary_
     index_to_word = {i:t for t,i in word_to_index.items()}
-    list_of_asorts = [ np.argsort(-words_compressed[:,index_to_index[index]].squeeze()) for index in indices]
-    latent_words = [ [index_to_word[i] for i in asort[:20]] for asort in list_of_asorts]
+    list_of_asorts = [ np.argsort(-words_compressed[:,index].squeeze()) for index in indices]
+    latent_words = [ [index_to_word[i] for i in asort[:10]] for asort in list_of_asorts]
 
-    index_to_genre = {0: "School", 1: "Romance", 2: "Family", 3:"Historical", 4: "Drama", 5: "Thriller", 6: "Life", 7: 'Chaebol', 8:"Medical", 9:"Friends", 10: "Law", 11:"Daughter/Mother", 12:"College", 13:"Father/Son"}
+    index_to_genre = {1: "School", 2: "Love", 3: "Family", 4: "Historical", 5:"Drama", 6: "Mystery", 10: "Medical", 12: "Friendships", 13: 'Law', 17:"College", 18:"Life", 19: "Idol"}
 
-    genres = [index_to_genre[index] for index in indices]
+    genres = [index_to_genre[index] for index in top_valid_dims]
     values = query_vec[indices]
     return list(zip(genres, values, latent_words))
 
@@ -203,35 +188,21 @@ def get_drama_details(id, df: pd.DataFrame, td_matrix: np.ndarray, docs_compress
     similar_dramas = [[genre, get_top_dramas_by_genre(df, genre, id, td_matrix)] for genre in initial_details["genres"]]
     initial_details["similarDramas"] = similar_dramas
 
-    index_to_index = {
-        0: 1,
-        1: 2,
-        2: 3,
-        3: 4,
-        4: 5,
-        5: 6,
-        6: 8,
-        7: 11,
-        8: 12,
-        9: 13,
-        10: 16,
-        11: 17,
-        12: 18,
-        13: 19
-        }
-    valid_dims = [1,2,3,4,5,6,8,11,12,13,16,17,18,19]
-    query_vec = docs_compressed[int(id),][valid_dims]
+    valid_dims = [1,2,3,4,5,6,10,12,13,17,18,19]
+    
+    query_vec = docs_compressed[int(id),valid_dims]
     indices = np.argsort(query_vec)[-3:][::-1]
+    top_valid_dims = [valid_dims[i] for i in indices]
+    values = query_vec[indices]
 
     word_to_index = vectorizer.vocabulary_    
     index_to_word = {i:t for t,i in word_to_index.items()}
-    list_of_asorts = [ np.argsort(-words_compressed[:,index_to_index[index]].squeeze()) for index in indices]
-    latent_words = [ [index_to_word[i] for i in asort[:20]] for asort in list_of_asorts]
+    list_of_asorts = [ np.argsort(-words_compressed[:,index].squeeze()) for index in top_valid_dims]
+    latent_words = [ [index_to_word[i] for i in asort[:10]] for asort in list_of_asorts]
+    index_to_genre = {1: "School", 2: "Love", 3: "Family", 4: "Historical", 5:"Drama", 6: "Mystery", 10: "Medical", 12: "Friendships", 13: 'Law', 17:"College", 18:"Life", 19: "Idol"}
+    # print(query_vec, indices, top_valid_dims)
 
-    index_to_genre = {0: "School", 1: "Romance", 2: "Family", 3:"Historical", 4: "Drama", 5: "Thriller", 6: "Life", 7: 'Chaebol', 8:"Medical", 9:"Friends", 10: "Law", 11:"Daughter/Mother", 12:"College", 13:"Father/Son"}
-
-    genres = [index_to_genre[index] for index in indices]
-    values = query_vec[indices]
+    genres = [index_to_genre[index] for index in top_valid_dims]
     return { "details": initial_details, "latentWords": list(zip(genres, values, latent_words))}
     
 def filter_by_tag(kdrama_df, desired_tags):
