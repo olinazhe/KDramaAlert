@@ -37,14 +37,21 @@ def home():
 def episodes_search():
     text = request.args.get("title")
     keywords = request.args.get("exclude")
-    genre = request.args.get("genre")
+    include_genres = request.args.get("genre")
+    exclude_genres = request.args.get("exclude_genre")
     results = json.loads(similarity.get_sim(text.lower(), kdramas_df, synopsis_td_mat, inv_idx, terms, doc_norms, vectorizer, docs_compressed, words_compressed))
-    if genre:
-        genre_filtered = []
-        for drama in results:
-            if genre in drama.get('genres'):
-                genre_filtered.append(drama)
-        results = genre_filtered
+    if include_genres:
+        included = set(include_genres.split(","))
+        results = [
+            drama for drama in results
+            if included.issubset(set(drama.get('genres', [])))
+        ]
+    if exclude_genres:
+        excluded = set(exclude_genres.split(","))
+        results = [
+            drama for drama in results
+            if excluded.isdisjoint(set(drama.get('genres', [])))
+        ]
     if keywords:
         for keyword in keywords.split(","):
             keyword = keyword.strip().lower()

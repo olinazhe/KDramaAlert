@@ -61,9 +61,13 @@
               <div class='sim-score-breakdown'>
                 <div class='sim-score-header' onclick='toggleDropdown()'>
                   <p class='sim-score-title'>Similarity Score Breakdown</p>
-                  <span id="dropdown-arrow">▲</span>
+                  <span id="dropdown-arrow" class="dropdown-arrow">
+                    <svg width="22" height="22" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                      <path d="M5 8L10 13L15 8" stroke="#465973" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    </svg>
+                  </span>
                 </div>
-                <div id='sim-score-content' style='display: none;'=>
+                <div id='sim-score-content' class='sim-score-content'=>
                   <div class='sim-info'>
                     <p class='sim-score-font'>Total Similarity Score: ${drama.simScore.toFixed(1)}%</p>  
                     <p class='sim-score-font'>Title Similarity Score: ${(drama.titleSim * 100).toFixed(1)}%</p>
@@ -201,10 +205,10 @@
       function toggleDropdown() {
         const content = document.getElementById('sim-score-content');
         const arrow = document.getElementById('dropdown-arrow');
-        const isHidden = content.style.display === 'none';
+        const isOpen = content.classList.contains('open');
 
-        content.style.display = isHidden ? 'flex' : 'none';
-        arrow.textContent = isHidden ? '▼' : '▲';
+        content.classList.toggle('open', !isOpen);
+        arrow.classList.toggle("open", !isOpen);
       }
 
       function fetchDrama(id) {
