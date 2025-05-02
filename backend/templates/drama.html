@@ -65,11 +65,11 @@
                 </div>
                 <div id='sim-score-content' style='display: none;'=>
                   <div class='sim-info'>
-                    <p class='sim-score-font'>Total Similarity Score: ${drama.simScore}%</p>  
-                    <p class='sim-score-font'>Title Similarity Score: ${drama.titleSim}%</p>
-                    <p class='sim-score-font'>Description Similarity Score: ${drama.cossim}%</p>
-                    <p class='sim-score-font'>Latent Dimensions Similarity Score: ${drama.svdSim}%</p>
-                    <p class='sim-score-font'>Social Component Score: ${drama.socialScore}%</p>
+                    <p class='sim-score-font'>Total Similarity Score: ${drama.simScore.toFixed(1)}%</p>  
+                    <p class='sim-score-font'>Title Similarity Score: ${(drama.titleSim * 100).toFixed(1)}%</p>
+                    <p class='sim-score-font'>Description Similarity Score: ${(drama.cossim * 100).toFixed(1)}%</p>
+                    <p class='sim-score-font'>Latent Dimensions Similarity Score: ${(drama.svdSim * 100).toFixed(1)}%</p>
+                    <p class='sim-score-font'>Social Component Score: ${(drama.socialScore * 100).toFixed(1)}%</p>
                   </div>
                   <div id="static-similarity-graph"></div>
                 </div>
