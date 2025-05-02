@@ -47,7 +47,7 @@ def strip_text(text: str, regex: str = r"\w+(?:'\w+)?") -> List[str]:
   
   return re.findall(regex, text.lower())
 
-def _build_vectorizer(max_features, stop_words, max_df=0.6, min_df=1, norm='l2'):
+def _build_vectorizer(max_features, stop_words, max_df=0.8, min_df=1, norm='l2'):
   """
   Returns a TfidfVectorizer object with the above preprocessing properties.
   """
@@ -119,13 +119,14 @@ def svd_prepreprocessing(df, vectorizer):
     "man", "rok", "hak", "wook", "jong", "kyoo", "suk", "shik", "geon", "yeop",
     "cheol", "bok", "mun", "pil", "jin", "han", "dong", "seung", "yong", "gyu",
     "geu", "roo", "shi", "lee", "yeo", "ri", "cha", "jo", "sung", "dae", "seon", "bong", "yeol"
-    ,"yi","yoo","moo","se", "yeong", "goo", "ri", "ja", "ri"]
+    ,"yi","yoo","moo","se", "yeong", "goo", "ri", "ja", "ri", "ju", "jun", "yun", "poong", "wan"
+    , "hui", "sun", "ahn", "gun", "ae", "san", "geum", "dal", "gi", "rae", "korea", "korean", "north", "south"]
   )
 
   def clean_synopsis(text):
       return " ".join(word for word in strip_text(text) if word.lower() not in korean_names)
   df["svd_synopsis"] = df["synopsis"].apply(clean_synopsis)
   td_matrix = vectorizer.fit_transform(df["svd_synopsis"])
-  docs_compressed, _, words_compressed = randomized_svd(td_matrix, n_components=20, random_state=42)
+  docs_compressed, _, words_compressed = randomized_svd(td_matrix, n_components=20, random_state=72)
   words_compressed = words_compressed.transpose()
   return docs_compressed, words_compressed
