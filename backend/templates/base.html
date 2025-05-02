@@ -55,17 +55,36 @@
           />
         </div>
         <div id="advanced-search-wrapper">
-          <button class="advanced-search-toggle" onclick="toggleAdvancedSearch()">
+          <button
+            class="advanced-search-toggle"
+            onclick="toggleAdvancedSearch()"
+          >
             Advanced Search
             <span id="dropdown-arrow" class="dropdown-arrow">
-              <svg width="22" height="22" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M5 8L10 13L15 8" stroke="#465973" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              <svg
+                width="22"
+                height="22"
+                viewBox="0 0 20 20"
+                fill="none"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <path
+                  d="M5 8L10 13L15 8"
+                  stroke="#465973"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                />
               </svg>
             </span>
           </button>
           <div id="advanced-search-section" class="advanced-search-section">
             <div class="filter-box">
-              <img src="{{ url_for('static', filename='images/mag-minus.svg') }}" width="20px" height="20px" />
+              <img
+                src="{{ url_for('static', filename='images/mag-minus.svg') }}"
+                width="20px"
+                height="20px"
+              />
               <input
                 class="exclude-text"
                 placeholder="Input keywords (separated by commas) to exclude ..."
@@ -78,7 +97,9 @@
             </div>
           </div>
         </div>
-        <button class="search-button" onclick="searchDramas(event)">Search</button>
+        <button class="search-button" onclick="searchDramas(event)">
+          Search
+        </button>
       </div>
       <div id="latent-dimension"></div>
       <div id="answer-box"></div>
@@ -88,15 +109,38 @@
       const includedGenres = new Set();
       const excludedGenres = new Set();
       const allGenres = [
-        "Comedy", "Romance", "Youth", "Drama", "Family", "Business", "Melodrama",
-        "Life", "Fantasy", "Food", "Medical", "Psychological", "Horror", "Action",
-        "Supernatural", "Thriller", "Mystery", "Law", "Crime", "Historical",
-        "Political", "Sci-Fi", "Military", "Sports"
+        "Comedy",
+        "Romance",
+        "Youth",
+        "Drama",
+        "Family",
+        "Business",
+        "Melodrama",
+        "Life",
+        "Fantasy",
+        "Food",
+        "Medical",
+        "Psychological",
+        "Horror",
+        "Action",
+        "Supernatural",
+        "Thriller",
+        "Mystery",
+        "Law",
+        "Crime",
+        "Historical",
+        "Political",
+        "Sci-Fi",
+        "Military",
+        "Sports",
+        "Sitcom",
+        "Music",
       ];
 
       function renderGenreButtons() {
         const container = document.getElementById("genre-options");
-        container.innerHTML = '<div class="genre-tags-title">Filter by Genre:</div>';
+        container.innerHTML =
+          '<div class="genre-tags-title">Filter by Genre:</div>';
         const checkSvg = `
         <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
           <path d="M5 10L9 14L15 6" stroke="#465973" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -115,7 +159,7 @@
         </svg>
         `;
 
-        allGenres.forEach(genre => {
+        allGenres.forEach((genre) => {
           const button = document.createElement("button");
           button.className = "genre-button";
 
@@ -149,10 +193,12 @@
       function toggleAdvancedSearch() {
         const section = document.getElementById("advanced-search-section");
         const button = document.querySelector(".advanced-search-toggle");
-        const arrow = document.getElementById('dropdown-arrow');
-        
+        const arrow = document.getElementById("dropdown-arrow");
+
         const isOpen = section.classList.toggle("open");
-        document.getElementById("advanced-search-wrapper").classList.toggle("open");
+        document
+          .getElementById("advanced-search-wrapper")
+          .classList.toggle("open");
         button.classList.toggle("expanded", isOpen);
         arrow.classList.toggle("open", isOpen);
       }
@@ -319,18 +365,23 @@
             const latent = data.dims;
 
             if (results.length === 0) {
-              document.getElementById("latent-dimension").classList.remove("visible");
+              document
+                .getElementById("latent-dimension")
+                .classList.remove("visible");
               document.getElementById("answer-box").classList.add("visible");
               document.getElementById("answer-box").innerHTML =
                 "<div class='no-results'><p>Sorry, no results found :(<p></div>";
-              document.getElementById("answer-box").scrollIntoView({ behavior: "smooth" });
+              document
+                .getElementById("answer-box")
+                .scrollIntoView({ behavior: "smooth" });
               return;
             }
 
-            document.getElementById("latent-dimension").innerHTML =
-              `Looking for latent dimensions: ${latent
-                .map((dim) => `<p class='latent-chips'>${dim[0]}</p>`)
-                .join("")}`;
+            document.getElementById(
+              "latent-dimension"
+            ).innerHTML = `Looking for latent dimensions: ${latent
+              .map((dim) => `<p class='latent-chips'>${dim[0]}</p>`)
+              .join("")}`;
 
             results.slice(0, 24).forEach((row) => {
               const tempDiv = document.createElement("div");
@@ -339,8 +390,12 @@
             });
 
             document.getElementById("answer-box").classList.add("visible");
-            document.getElementById("latent-dimension").classList.add("visible");
-            document.getElementById("latent-dimension").scrollIntoView({ behavior: "smooth" });
+            document
+              .getElementById("latent-dimension")
+              .classList.add("visible");
+            document
+              .getElementById("latent-dimension")
+              .scrollIntoView({ behavior: "smooth" });
           });
       }
       document.addEventListener("DOMContentLoaded", renderGenreButtons);
