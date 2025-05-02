@@ -44,11 +44,9 @@ body {
   justify-content: center;
 }
 
-
 #latent-dimension.visible {
   opacity: 1;
 }
-
 
 .latent-chips {
   font-family: "Inter", sans-serif;
@@ -485,6 +483,7 @@ body {
 
 .latent-word {
   color: red;
+  font-weight: bold;
 }
 
 .recommend-drama-container {
@@ -563,7 +562,7 @@ body {
   opacity: 1;
 }
 
-.filter-box{
+.filter-box {
   border-radius: 50px;
   border: 5px solid #75b0e8;
   display: flex;
