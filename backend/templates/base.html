@@ -54,9 +54,7 @@
             onkeyup="filterText()"
           />
         </div>
-        <div class ="drama-genres-tags-list">
-          
-        </div>
+        <div class="drama-genres-tags-list"></div>
         <div class="filter-box">
           <img
             src="{{ url_for('static', filename='images/mag-minus.svg') }} "
@@ -69,6 +67,83 @@
             id="exclude-text-val"
             onkeyup="excludeText()"
           />
+        </div>
+        <div class="genre-tags">
+          <button class="dropdown">Filter by genre</button>
+          <div class="genre-options">
+            <button class="genre-button" onclick="filterGenre('Comedy')">
+              Comedy
+            </button>
+            <button class="genre-button" onclick="filterGenre('Romance')">
+              Romance
+            </button>
+            <button class="genre-button" onclick="filterGenre('Youth')">
+              Youth
+            </button>
+            <button class="genre-button" onclick="filterGenre('Drama')">
+              Drama
+            </button>
+            <button class="genre-button" onclick="filterGenre('Family')">
+              Family
+            </button>
+            <button class="genre-button" onclick="filterGenre('Business')">
+              Business
+            </button>
+            <button class="genre-button" onclick="filterGenre('Melodrama')">
+              Melodrama
+            </button>
+            <button class="genre-button" onclick="filterGenre('Life')">
+              Life
+            </button>
+            <button class="genre-button" onclick="filterGenre('Fantasy')">
+              Fantasy
+            </button>
+            <button class="genre-button" onclick="filterGenre('Food')">
+              Food
+            </button>
+            <button class="genre-button" onclick="filterGenre('Medical')">
+              Medical
+            </button>
+            <button class="genre-button" onclick="filterGenre('Psychological')">
+              Psychological
+            </button>
+            <button class="genre-button" onclick="filterGenre('Horror')">
+              Horror
+            </button>
+            <button class="genre-button" onclick="filterGenre('Action')">
+              Action
+            </button>
+            <button class="genre-button" onclick="filterGenre('Supernatural')">
+              Supernatural
+            </button>
+            <button class="genre-button" onclick="filterGenre('Thriller')">
+              Thriller
+            </button>
+            <button class="genre-button" onclick="filterGenre('Mystery')">
+              Mystery
+            </button>
+            <button class="genre-button" onclick="filterGenre('Law')">
+              Law
+            </button>
+            <button class="genre-button" onclick="filterGenre('Crime')">
+              Crime
+            </button>
+            <button class="genre-button" onclick="filterGenre('Historical')">
+              Historical
+            </button>
+            <button class="genre-button" onclick="filterGenre('Political')">
+              Political
+            </button>
+            <button class="genre-button" onclick="filterGenre('Sci-Fi')">
+              Sci-Fi
+            </button>
+            <button class="genre-button" onclick="filterGenre('Military')">
+              Military
+            </button>
+            <button class="genre-button" onclick="filterGenre('Sports')">
+              Sports
+            </button>
+          </div>
         </div>
       </div>
       <div id="latent-dimension"></div>
@@ -212,6 +287,56 @@
 
       function sendFocus() {
         document.getElementById("filter-text-val").focus();
+      }
+
+      function filterGenre(genres) {
+        document.getElementById("answer-box").innerHTML = "";
+        fetch(
+          "/episodes?" +
+            new URLSearchParams({
+              title: document.getElementById("filter-text-val").value,
+              exclude: document.getElementById("exclude-text-val").value,
+              genre: genres,
+            }).toString()
+        )
+          .then((response) => response.json())
+          .then((data) => {
+            const results = data.results;
+            if (results.length === 0) {
+              document
+                .getElementById("latent-dimension")
+                .classList.remove("visible");
+              document.getElementById("answer-box").classList.add("visible");
+              document.getElementById("answer-box").innerHTML =
+                "<div class='no-results'><p>Sorry, no results found :(<p></div>";
+              document
+                .getElementById("answer-box")
+                .scrollIntoView({ behavior: "smooth" });
+
+              return;
+            } else {
+              document.getElementById(
+                "latent-dimension"
+              ).innerHTML = `Looking for latent dimensions: ${data.dims
+                .map((dim) => `<p class='latent-chips'>${dim[0]}</p>`)
+                .join("")}`;
+              results.forEach((row, index) => {
+                if (index >= 24) {
+                  return;
+                }
+                let tempDiv = document.createElement("div");
+                tempDiv.innerHTML = answerBoxTemplate(row);
+                document.getElementById("answer-box").appendChild(tempDiv);
+              });
+            }
+            document.getElementById("answer-box").classList.add("visible");
+            document
+              .getElementById("latent-dimension")
+              .classList.add("visible");
+            document
+              .getElementById("latent-dimension")
+              .scrollIntoView({ behavior: "smooth" });
+          });
       }
 
       function excludeText() {

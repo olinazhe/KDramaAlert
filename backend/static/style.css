@@ -482,7 +482,7 @@ body {
 }
 
 .latent-word {
-  color: #DC8690;
+  color: #dc8690;
 }
 
 .recommend-drama-container {
@@ -623,8 +623,8 @@ body {
 }
 
 .sim-score-font {
-font-size: 16px;
-margin: 0;
+  font-size: 16px;
+  margin: 0;
 }
 
 .sim-score-title {
@@ -632,8 +632,7 @@ margin: 0;
   font-weight: 700;
   margin: 0;
   text-align: left;
-  }
-
+}
 
 .sim-info {
   display: flex;
@@ -658,4 +657,60 @@ margin: 0;
   flex-grow: 1;
   margin: 0;
   justify-content: space-between;
+}
+
+.genre-tags {
+  position: relative;
+  display: inline-block;
+  margin: 10px 0;
+}
+
+.dropdown {
+  font-family: "Inter", sans-serif;
+  font-size: 20px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  padding: 8px 20px;
+  border-radius: 48px;
+  background: #f8dcdd;
+  border: none;
+  cursor: pointer;
+}
+
+.genre-options {
+  display: none;
+  position: absolute;
+  background-color: #f9f9f9;
+  min-width: 200px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  border-radius: 10px;
+  padding: 10px;
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.genre-tags:hover .genre-options {
+  display: block;
+}
+.genre-button {
+  font-family: "Inter", sans-serif;
+  font-size: 18px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin: 5px 0;
+  display: block;
+  width: 100%;
+  padding: 8px 16px;
+  text-align: left;
+  border-radius: 48px;
+  background: #f8dcdd;
+  border: none;
+  cursor: pointer;
+}
+
+.genre-button:hover {
+  background-color: #f3c7c8;
 }
