@@ -171,7 +171,7 @@ def get_sim(query:str, df: pd.DataFrame, td_mat: np.ndarray, inv_idx: dict, term
 
 def get_top_dramas_by_genre(df: pd.DataFrame, genre: str, id: str, td_matrix: np.ndarray) -> List[dict]:
     """
-    Returns the top 5 dramas for a given genre.
+    Returns the top 8 dramas for a given genre.
     """
 
     doc_sims = np.dot(td_matrix, td_matrix[int(id)])

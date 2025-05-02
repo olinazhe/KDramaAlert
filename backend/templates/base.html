@@ -39,7 +39,7 @@
     <div id="tooltip-graph" class="tooltip-graph"></div>
     <div class="full-body-container">
       <div class="top-text">
-        <div class="google-colors">
+        <div>
           <img
             src="{{ url_for('static', filename='images/kdramaalert_logo.png') }}"
             class="logo"
@@ -54,15 +54,18 @@
             onkeyup="filterText()"
           />
         </div>
+        <div class ="drama-genres-tags-list">
+          
+        </div>
         <div class="filter-box">
           <img
-            src="{{ url_for('static', filename='images/tag.svg') }} "
+            src="{{ url_for('static', filename='images/mag-minus.svg') }} "
             width="20px"
             height="20px"
           />
           <input
             class="exclude-text"
-            placeholder="filter keywords to exclude..."
+            placeholder="Input keywords to exclude ..."
             id="exclude-text-val"
             onkeyup="excludeText()"
           />

@@ -415,7 +415,7 @@ body {
   gap: 80px;
   background-color: #ebfaff;
   font-family: "Inter", sans-serif;
-  align-items: center;
+  align-items: flex-start;
 }
 
 .single-drama-row-1 {
@@ -482,8 +482,7 @@ body {
 }
 
 .latent-word {
-  color: red;
-  font-weight: bold;
+  color: #DC8690;
 }
 
 .recommend-drama-container {
@@ -599,4 +598,64 @@ body {
 
 .result-card.show {
   display: block;
+}
+
+.tag-icon {
+  width: 26px;
+  height: 26px;
+}
+
+.sim-score-breakdown {
+  background-color: #c6e1eb;
+  padding: 18px 36px;
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: left;
+  font-size: 16px;
+}
+
+#static-similarity-graph {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.sim-score-font {
+font-size: 16px;
+margin: 0;
+}
+
+.sim-score-title {
+  font-size: 20px;
+  font-weight: 700;
+  margin: 0;
+  text-align: left;
+  }
+
+
+.sim-info {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+#sim-score-content {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  align-items: center;
+  flex-grow: 1;
+  justify-content: space-between;
+}
+
+.sim-score-header {
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+  align-items: center;
+  flex-grow: 1;
+  margin: 0;
+  justify-content: space-between;
 }

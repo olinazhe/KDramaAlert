@@ -1,55 +1,54 @@
 <!DOCTYPE html>
-<title>KDramaAlert</title>
-<link rel="icon" type="image/x-icon" href="static/images/favicons.png" />
-<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link
-  href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
-  rel="stylesheet"
-/>
-<body>
-  <div class="full-body-container">
-    <div id="container"></div>
-  </div>
+<html lang="en">
+  <head>
+    <title>KDramaAlert</title>
+    <link rel="icon" type="image/x-icon" href="static/images/favicons.png" />
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+  </head>
+  <body>
+    <div class="full-body-container">
+      <div id="container"></div>
+    </div>
 
-  <script>
-    const drama = "{{drama}}";
+    <script>
+      const drama = "{{drama}}";
 
-    function pageTemplate(drama, latent) {
-      return `<div class='single-drama-container'>
-          <img src=${drama.img} class='drama-image-1'>
-          <div class='single-drama-info'>
-            <div class='single-drama-row single-drama-row-1'>
-              <p class='no-margin'>${drama.name}</p>
-              <div class='rating-with-image'>
-                <p class='no-margin'>${drama.score}/10</p>
-                <img src="{{ url_for('static', filename='images/heart.svg') }}" class='single-drama-heart' />
+      function pageTemplate(drama, latent) {
+        return `<div class='single-drama-container'>
+            <img src=${drama.img} class='drama-image-1'>
+            <div class='single-drama-info'>
+              <div class='single-drama-row single-drama-row-1'>
+                <p class='no-margin'>${drama.name}</p>
+                <div class='rating-with-image'>
+                  <p class='no-margin'>${drama.score}/10</p>
+                  <img src="{{ url_for('static', filename='images/heart.svg') }}" class='single-drama-heart' />
 
+                </div>
               </div>
-            </div>
-            <div class='single-drama-row single-drama-row-2'>
-              <p class='no-margin'>${drama.year}</p>
-              <p class='no-margin'>${drama.episodeCount}</p>
-            </div>
-            <p id="drama-synopsis" class='single-drama-synopsis'>${
-              drama.synopsis
-            }</p>
-            <div class='drama-genres-tags-list'>
-            <img src="{{ url_for('static', filename='images/tag.svg') }}" width = "29px" height = "29px" />
-  ${drama.genres
-    .map((genre) => `<p class='drama-genres-1'>${genre}</p>`)
-    .join("")}
-</div>
-<div class='rating-with-image'>
+              <div class='single-drama-row single-drama-row-2'>
+                <p class='no-margin'>${drama.year}</p>
+                <p class='no-margin'>${drama.episodeCount}</p>
+              </div>
+              <p id="drama-synopsis" class='single-drama-synopsis'>${
+                drama.synopsis}</p>
+              <div class='drama-genres-tags-list'>
+                <img class='tag-icon' src="{{ url_for('static', filename='images/tag.svg') }}" />
+                  ${drama.genres.map((genre) => `<p class='drama-genres-1'>${genre}</p>`).join("")}
+              </div>
+              <div class='rating-with-image'>
                 <img src="{{ url_for('static', filename='images/movieicon.svg') }}"/>
                 <div class='drama-networks'>
-      ${drama.network
-        .map((network) => `<p class='drama-networks-text'>${network}</p>`)
-        .join("")}
-    </div>
-            </div>
-    
+                  ${drama.network
+                    .map((network) => `<p class='drama-networks-text'>${network}</p>`).join("")}
+                </div>
+              </div>
               <div class='drama-genres-tags-list'>
                 <p class='single-drama-synopsis'>Latent Dimensions:</p>
                 ${latent
@@ -59,79 +58,166 @@
                   )
                   .join("")}
               </div>
-          </div>
-        </div>
-        <div id="container2" class='recommend-drama-container'>
-        </div>
-        `;
-    }
-
-    function createPage(drama, latent) {
-      document.title = "KDramaAlert - " + drama.name;
-      document.getElementById("container").innerHTML = pageTemplate(
-        drama,
-        latent
-      );
-      document.getElementById("container2").innerHTML =
-        createRecommendedGenreSection(drama.similarDramas);
-      const elements = document.getElementsByClassName(
-        "single-drama-latent-chips"
-      );
-      for (let i = 0; i < elements.length; i++) {
-        elements[i].addEventListener("mouseenter", () => {
-          const synopsisElement = document.getElementById("drama-synopsis");
-          synopsisElement.innerHTML = drama.synopsis.replace(
-            /\b\w+\b/g,
-            (string) => {
-              const word = string.toLowerCase();
-              if (latent[i][2].includes(word)) {
-                return `<span class='latent-word'>${string}</span>`;
-              } else {
-                return string;
-              }
-            }
-          );
-        });
-        elements[i].addEventListener("mouseleave", () => {
-          const synopsisElement = document.getElementById("drama-synopsis");
-          synopsisElement.innerHTML = drama.synopsis;
-        });
-      }
-    }
-
-    function createRecommendedGenreSection(genres) {
-      return genres
-        .map(
-          (genre) => `<div class='recommend-drama-section'> 
-          <h3 class='recommend-drama-header'>Other Similar <strong>${
-            genre[0]
-          }</strong> K-Dramas</h3>
-          <div class='recommend-drama-list'>
-            ${genre[1]
-              .map(
-                (row) =>
-                  `<div><a href='${row.id}' target='_blank'>
-                    <img class='drama-image-2' src=${row.img}> 
-                    </a>
-                  </div>`
-              )
-              .join("")}
+              <div class='sim-score-breakdown'>
+                <div class='sim-score-header' onclick='toggleDropdown()'>
+                  <p class='sim-score-title'>Similarity Score Breakdown</p>
+                  <span id="dropdown-arrow">▲</span>
+                </div>
+                <div id='sim-score-content' style='display: none;'=>
+                  <div class='sim-info'>
+                    <p class='sim-score-font'>Total Similarity Score: ${drama.simScore}%</p>  
+                    <p class='sim-score-font'>Title Similarity Score: ${drama.titleSim}%</p>
+                    <p class='sim-score-font'>Description Similarity Score: ${drama.cossim}%</p>
+                    <p class='sim-score-font'>Latent Dimensions Similarity Score: ${drama.svdSim}%</p>
+                    <p class='sim-score-font'>Social Component Score: ${drama.socialScore}%</p>
+                  </div>
+                  <div id="static-similarity-graph"></div>
+                </div>
+              </div>
             </div>
-        </div>`
-        )
-        .join("");
-    }
+          </div>
+          <div id="container2" class='recommend-drama-container'>
+          </div>
+          `;
+      }
 
-    function fetchDrama(id) {
-      fetch("/drama/" + id, {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      })
-        .then((res) => res.json())
-        .then((res) => createPage(res.details, res.latentWords));
-    }
+      function createPage(drama, latent) {
+        document.title = "KDramaAlert - " + drama.name;
+        document.getElementById("container").innerHTML = pageTemplate(
+          drama,
+          latent
+        );
+        drawStaticGraph(drama);
+        document.getElementById("container2").innerHTML =
+          createRecommendedGenreSection(drama.similarDramas);
+        const elements = document.getElementsByClassName(
+          "single-drama-latent-chips"
+        );
+        for (let i = 0; i < elements.length; i++) {
+          elements[i].addEventListener("mouseenter", () => {
+            const synopsisElement = document.getElementById("drama-synopsis");
+            synopsisElement.innerHTML = drama.synopsis.replace(
+              /\b\w+\b/g,
+              (string) => {
+                const word = string.toLowerCase();
+                if (latent[i][2].includes(word)) {
+                  return `<span class='latent-word'>${string}</span>`;
+                } else {
+                  return string;
+                }
+              }
+            );
+          });
+          elements[i].addEventListener("mouseleave", () => {
+            const synopsisElement = document.getElementById("drama-synopsis");
+            synopsisElement.innerHTML = drama.synopsis;
+          });
+        }
+      }
 
-    fetchDrama(drama);
-  </script>
-</body>
+      function createRecommendedGenreSection(genres) {
+        return genres
+          .map(
+            (genre) => `<div class='recommend-drama-section'> 
+            <h3 class='recommend-drama-header'>Other Similar <strong>${
+              genre[0]
+            }</strong> K-Dramas</h3>
+            <div class='recommend-drama-list'>
+              ${genre[1]
+                .map(
+                  (row) =>
+                    `<div><a href='${row.id}' target='_blank'>
+                      <img class='drama-image-2' src=${row.img}> 
+                      </a>
+                    </div>`
+                )
+                .join("")}
+              </div>
+          </div>`
+          )
+          .join("");
+      }
+
+      function drawStaticGraph({ titleSim, cossim, svdSim, socialScore }) {
+        const data = [
+          { name: "Title Sim", value: Number(titleSim * 100).toFixed(2) },
+          { name: "Desc Sim", value: Number(cossim * 100).toFixed(2) },
+          { name: "SVD Sim", value: Number(svdSim * 100).toFixed(2) },
+          { name: "Social Sim", value: Number(socialScore * 100).toFixed(2) },
+        ];
+
+        const container = d3.select("#static-similarity-graph");
+        container.selectAll("svg").remove(); // Clear any previous graph
+
+        const width = 300;
+        const height = 160;
+        const margin = { top: 0, right: 25, bottom: 30, left: 80 };
+
+        const svg = container
+          .append("svg")
+          .attr("width", width)
+          .attr("height", height);
+
+        const x = d3.scaleLinear().domain([0, 100]).range([margin.left, width - margin.right]);
+
+        const y = d3
+          .scaleBand()
+          .domain(data.map((d) => d.name))
+          .range([margin.top, height - margin.bottom])
+          .padding(0.45);
+
+        svg
+          .append("g")
+          .selectAll("rect")
+          .data(data)
+          .join("rect")
+          .attr("x", x(0))
+          .attr("y", (d) => y(d.name))
+          .attr("width", (d) => x(d.value) - x(0))
+          .attr("height", y.bandwidth())
+          .attr("fill", "#86abdc");
+
+        svg
+          .append("g")
+          .attr("transform", `translate(${margin.left},0)`)
+          .call(d3.axisLeft(y).tickSize(0))
+          .selectAll("text")
+          .style("font-size", "14px")
+          .style("fill", "#465973");
+
+        svg
+          .append("g")
+          .attr("transform", `translate(0,${height - margin.bottom})`)
+          .call(
+            d3.axisBottom(x).ticks(4).tickFormat((d) => `${d}%`)
+          )
+          .selectAll("text")
+          .style("font-size", "12px")
+          .style("fill", "#465973");
+
+        svg.selectAll(".domain, .tick line").attr("stroke", "#465973");
+      }
+
+      function toggleDropdown() {
+        const content = document.getElementById('sim-score-content');
+        const arrow = document.getElementById('dropdown-arrow');
+        const isHidden = content.style.display === 'none';
+
+        content.style.display = isHidden ? 'flex' : 'none';
+        arrow.textContent = isHidden ? '▼' : '▲';
+      }
+
+      function fetchDrama(id) {
+        fetch("/drama/" + id, {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        })
+          .then((res) => res.json())
+          .then((res) => createPage(res.details, res.latentWords));
+      }
+
+      fetchDrama(drama);
+    </script>
+  </body>
+</html>
