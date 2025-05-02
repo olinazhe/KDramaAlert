@@ -562,3 +562,42 @@ body {
   display: block;
   opacity: 1;
 }
+
+.filter-box{
+  border-radius: 50px;
+  border: 5px solid #75b0e8;
+  display: flex;
+  align-items: center;
+  margin-top: 8px;
+  padding: 12px;
+  width: 450px;
+  background-color: #fff;
+}
+.exclude-text {
+  font-family: "Inter", sans-serif;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 400;
+  line-height: normal;
+  margin: 0px;
+}
+.filter-box input {
+  width: 100%;
+  margin-left: 10px;
+  font-size: 16px;
+  border: none;
+  outline: 0;
+  color: #465973;
+}
+
+.filter-box input::placeholder {
+  color: #a0b2cc;
+}
+
+.result-card.hide {
+  display: none;
+}
+
+.result-card.show {
+  display: block;
+}

@@ -53,6 +53,19 @@
             onkeyup="filterText()"
           />
         </div>
+        <div class="filter-box">
+          <img
+            src="{{ url_for('static', filename='images/tag.svg') }} "
+            width="29"
+            height="29"
+          />
+          <input
+            class="exclude-text"
+            placeholder="filter keywords to exclude..."
+            id="exclude-text-val"
+            onkeyup="excludeText()"
+          />
+        </div>
       </div>
       <div id="latent-dimension"></div>
       <div id="answer-box"></div>
@@ -197,20 +210,23 @@
         document.getElementById("filter-text-val").focus();
       }
 
-      function filterText() {
+      function excludeText() {
         if (event.key === "Enter") {
           document.getElementById("answer-box").innerHTML = "";
           fetch(
             "/episodes?" +
               new URLSearchParams({
                 title: document.getElementById("filter-text-val").value,
+                exclude: document.getElementById("exclude-text-val").value,
               }).toString()
           )
             .then((response) => response.json())
             .then((data) => {
               const results = data.results;
               if (results.length === 0) {
-                document.getElementById("latent-dimension").classList.remove("visible");
+                document
+                  .getElementById("latent-dimension")
+                  .classList.remove("visible");
                 document.getElementById("answer-box").classList.add("visible");
                 document.getElementById("answer-box").innerHTML =
                   "<div class='no-results'><p>Sorry, no results found :(<p></div>";
@@ -221,10 +237,10 @@
                 return;
               } else {
                 document.getElementById(
-                "latent-dimension"
-              ).innerHTML = `Looking for latent dimensions: ${data.dims
-                .map((dim) => `<p class='latent-chips'>${dim[0]}</p>`)
-                .join("")}`;
+                  "latent-dimension"
+                ).innerHTML = `Looking for latent dimensions: ${data.dims
+                  .map((dim) => `<p class='latent-chips'>${dim[0]}</p>`)
+                  .join("")}`;
                 results.forEach((row, index) => {
                   if (index >= 24) {
                     return;
@@ -235,7 +251,60 @@
                 });
               }
               document.getElementById("answer-box").classList.add("visible");
-              document.getElementById("latent-dimension").classList.add("visible");
+              document
+                .getElementById("latent-dimension")
+                .classList.add("visible");
+              document
+                .getElementById("latent-dimension")
+                .scrollIntoView({ behavior: "smooth" });
+            });
+        }
+      }
+
+      function filterText() {
+        if (event.key === "Enter") {
+          document.getElementById("answer-box").innerHTML = "";
+          fetch(
+            "/episodes?" +
+              new URLSearchParams({
+                title: document.getElementById("filter-text-val").value,
+                exclude: document.getElementById("exclude-text-val").value,
+              }).toString()
+          )
+            .then((response) => response.json())
+            .then((data) => {
+              const results = data.results;
+              if (results.length === 0) {
+                document
+                  .getElementById("latent-dimension")
+                  .classList.remove("visible");
+                document.getElementById("answer-box").classList.add("visible");
+                document.getElementById("answer-box").innerHTML =
+                  "<div class='no-results'><p>Sorry, no results found :(<p></div>";
+                document
+                  .getElementById("answer-box")
+                  .scrollIntoView({ behavior: "smooth" });
+
+                return;
+              } else {
+                document.getElementById(
+                  "latent-dimension"
+                ).innerHTML = `Looking for latent dimensions: ${data.dims
+                  .map((dim) => `<p class='latent-chips'>${dim[0]}</p>`)
+                  .join("")}`;
+                results.forEach((row, index) => {
+                  if (index >= 24) {
+                    return;
+                  }
+                  let tempDiv = document.createElement("div");
+                  tempDiv.innerHTML = answerBoxTemplate(row);
+                  document.getElementById("answer-box").appendChild(tempDiv);
+                });
+              }
+              document.getElementById("answer-box").classList.add("visible");
+              document
+                .getElementById("latent-dimension")
+                .classList.add("visible");
               document
                 .getElementById("latent-dimension")
                 .scrollIntoView({ behavior: "smooth" });

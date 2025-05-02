@@ -36,7 +36,20 @@ def home():
 @app.route("/episodes")
 def episodes_search():
     text = request.args.get("title")
-    return {"results": json.loads(similarity.get_sim(text.lower(), kdramas_df, synopsis_td_mat, inv_idx, terms, doc_norms, vectorizer, docs_compressed, words_compressed)),
+    keywords = request.args.get("exclude")
+    results = json.loads(similarity.get_sim(text.lower(), kdramas_df, synopsis_td_mat, inv_idx, terms, doc_norms, vectorizer, docs_compressed, words_compressed))
+    if keywords:
+        for keyword in keywords.split(","):
+            keyword = keyword.strip().lower()
+            if keyword: 
+                filtered = []
+                for drama in results:
+                    if keyword in drama['name'].lower() or keyword in drama.get('synopsis').lower():
+                        continue
+                    else:
+                        filtered.append(drama)
+                results = filtered
+    return {"results": results,
             "dims": similarity.get_top_latent_dims(text, vectorizer, words_compressed)}
 
 @app.route("/<id>")
