@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<title>{% block title %}{% endblock %} - Flaskr</title>
+<title>KDramaAlert</title>
+<link rel="icon" type="image/x-icon" href="static/images/favicons.png" />
 <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}" />
 <link rel="preconnect" href="https://fonts.googleapis.com" />
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
@@ -66,6 +67,7 @@
     }
 
     function createPage(drama, latent) {
+      document.title = "KDramaAlert - " + drama.name;
       document.getElementById("container").innerHTML = pageTemplate(
         drama,
         latent
