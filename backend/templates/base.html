@@ -2,6 +2,7 @@
 <html lang="en">
   <head>
     <title>{% block title %}{% endblock %} - Flaskr</title>
+    <link rel="icon" type="image/x-icon" href="static/images/favicons.png" />
     <link
       rel="stylesheet"
       href="{{ url_for('static', filename='style.css') }}"
@@ -56,8 +57,8 @@
         <div class="filter-box">
           <img
             src="{{ url_for('static', filename='images/tag.svg') }} "
-            width="29"
-            height="29"
+            width="20px"
+            height="20px"
           />
           <input
             class="exclude-text"
